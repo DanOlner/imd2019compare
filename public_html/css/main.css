@@ -1,0 +1,83 @@
+body {
+    background-color: rgb(150,150,150);
+}
+
+.button {
+
+}
+.buttonselected {
+    background: green;
+    color: white;
+}
+
+
+/*https://css-tricks.com/multiple-class-id-selectors/*/
+/*Difference between avg. line-chart and avg.line-chart*/
+svg.line-chart path {
+    fill: none;
+    stroke: #555;
+    stroke-width: 2; 
+}
+
+svg.map path {
+    fill: none;
+    stroke: #555;
+    stroke-width: 0; 
+}
+
+g.enghexmap path {
+    fill: none;
+    stroke: rgb(0,0,0);
+    stroke-width: 1; 
+}
+
+/*Mainly just to see where it is for now*/
+svg.map {
+    /*border-style: solid*/
+}
+
+rect#sidebarrect {
+    fill: rgb(50,50,50);
+    /*fill: rgb(100,100,100);*/
+    /*fill: rgb(255,255,255);*/
+    stroke: rgb(0,0,0);
+    stroke-width: 1px
+}
+
+.graphpath {
+    fill: none;
+    stroke: #555;
+    stroke-width: 2; 
+}
+
+div#buttongroup1 {
+    padding: 20px    
+}
+
+div#sliderdiv {
+    /*padding: 15px;*/
+    margin-left: 30px;
+    margin-top: 10px;
+    /*float: left*/
+}
+
+
+/*https://www.w3schools.com/css/css3_buttons.asp*/
+button {
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+    border-radius: 12px;
+    -webkit-transition-duration: 0.4s;  
+    transition-duration: 0.4s;
+    /*float: left*/
+}
+
+
+
+button:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+

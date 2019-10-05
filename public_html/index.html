@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>IMD comparator</title>
+        <script type="text/javascript" src="js/d3.js"></script>
+        <script type="text/javascript" src="js/d3-scale-chromatic.js"></script>
+        <script type="text/javascript" src="js/d3-selection-multi.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/lodash.js"></script>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/jquery-ui.css">
+    </head>
+    <body>
+        
+        <div id ="interactions">
+            <button class="button buttonselected" value="top">Set top map</button>
+            <button class="button" value="bottom">Set bottom map</button>
+            <label for="tags">Choose local authority from map below or start typing here then select: </label>
+            <input id="tags">
+        </div>
+
+        <div class = "mapdiv">
+
+            <svg class="map" width="1800px" height="1100px">
+
+            <!--initially for graph of wage multiple over time but reusable-->
+            <!--            <g class="box1" transform = "translate(100,50)">
+                        <g class="graphlines"></g>
+                        <g class="yearaxis"></g>
+                        <g class="yaxis"></g>
+                        </g>-->
+
+
+            <!--England LAD hexmap and name translate together-->
+            <g class="engmap_n_LAname" transform = "translate(0,0)">
+            <g class="enghexmap">
+            <!--England hexmap paths added here-->
+            </g>
+            <!--Text position relative to map, at bottom-->
+            <text id = "nameofla" x ="200" y="700" font-size="40px" fill="black" fill-opacity="0.5" text-anchor="left"></text>
+            </g>
+
+
+            <!--translate both map and sidebar-->
+            <g class="topmapandsidebar" transform = "translate(500,0)">
+            <g class="topmap">
+
+
+            <!--TOP map paths added here-->
+
+            <!--translate sidebar relative to map/sidebar container-->
+            <g id="topsidebar" transform = "translate(590,10)">
+            <rect id = "topsidebarrect" width = "35" height = "800"></rect>            
+            </g>
+            
+            <!--NOTE! "BOTTOM" SIDEBAR IS ACTUALLY TO THE RIGHT OF THE OTHER SIDE BAR. So position relatively here.-->
+            <g id="bottomsidebar" transform = "translate(640,10)">
+            <rect id = "bottomsidebarrect" width = "35" height = "800"></rect>            
+            </g>
+
+
+            </g>
+            </g>
+            
+            
+            <g class="bottommapandsidebar" transform = "translate(500,400)">
+            <g class="bottommap">
+
+
+            <!--BOTTOM map paths added here-->
+
+            </g>
+            </g>
+
+            <!--Get selection appearing drawn over top of map-->
+            <g id="topselect" transform = "translate(400,0)"></g>
+
+
+            </svg>
+        </div>
+
+        <script type="text/javascript" src="main.js"></script>		        
+    </body>
+</html>
