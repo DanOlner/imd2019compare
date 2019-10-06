@@ -5,12 +5,67 @@ body {
 
 /*centre whole page*/
 div.wholepage {
-  max-width: 1250px;
-  margin: auto;
-  /*background: white;*/
-  background-color: rgb(150,150,150);
-  padding: 25px;
+    max-width: 1250px;
+    margin: auto;
+    /*background: white;*/
+    background-color: rgb(150,150,150);
+    padding: 25px;
 }
+
+
+div.story {
+
+    position:absolute;
+    left:20px;
+    top:670px;
+    /*background-color: rgb(130,130,130);*/
+    width: 570px;
+
+}
+
+/*stop svg text from being selectable
+https://jsfiddle.net/adeneo/72LvL8n6/*/
+.svgtxt{
+  -webkit-touch-callout: none;
+  -webkit-user-select:none;
+  -khtml-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  -o-user-select:none;
+  user-select:none;
+}
+
+
+
+/*menu hover*/
+/*http://jsfiddle.net/sW7Dh/4/*/
+.dropdown-item {
+		background-color: white;
+		color: black;
+}
+
+.dropdown-item:hover {
+    background-color: ForestGreen;
+    color: white;
+    background-image: none;
+}
+
+
+
+.arrow {
+    fill:DimGrey;
+}
+
+.arrow:hover {
+    fill: rgb(50,200,50);
+    /*fill: #DA4567;*/
+}
+
+.arrow:active{
+    fill: rgb(150,250,150);
+    /*fill: #DA4567;*/
+}
+
 
 
 
@@ -34,33 +89,42 @@ button.absolute.buttonselected {
     background: green;
     color: white;
 }
-    
+
 button#hexmap_mean{    
-    left: 10px;
+    left: 0px;
     top: 100px;
 }
 button#hexmap_median{    
-    left: 10px;
+    left: 0px;
     top: 140px;
 }
 button#hexmap_lowest{    
-    left: 10px;
+    left: 0px;
     top: 180px;
 }
 button#hexmap_highest{    
-    left: 10px;
+    left: 0px;
     top: 220px;
 }
 
 button#difftoggle{    
-    left: 10px;
+    left: 0px;
     top: 280px;
 }
 
 button#yearbutton{    
-    left: 10px;
+    left: 0px;
     top: 40px;
 }
+
+.absoluteup{
+    position:absolute;
+    left:0px;
+    top:800px;
+
+}
+
+
 
 /*https://css-tricks.com/multiple-class-id-selectors/*/
 /*Difference between avg. line-chart and avg.line-chart*/

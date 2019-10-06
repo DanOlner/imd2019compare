@@ -1,4 +1,5 @@
 var state = {
+    storyindex: -1, //first use will go to zero and get that. Obv, pass if going backwards
     zonehoveredover: null,
     setwhichmap: "top", //top or bottom
     topmapselection: "Sheffield",
@@ -133,7 +134,7 @@ $("#difftoggle").click(function () {
 
 //year toggle button
 $("#yearbutton").click(function () {
-    
+
 //    console.log("badgers!")
 //
 //    if (state.year === "2019") {
@@ -146,8 +147,9 @@ $("#yearbutton").click(function () {
 //
 //    }
 //    
+    state.year = state.year === "2019" ? "2015" : "2019"
     yearChanged()
-    
+
 })
 
 
@@ -159,6 +161,7 @@ $("#yearbutton").click(function () {
 document.addEventListener("keypress", function onPress(event) {
     if (event.key === "Y" | event.key === "y") {
 
+        state.year = state.year === "2019" ? "2015" : "2019"
         yearChanged()
 
     }
@@ -166,9 +169,71 @@ document.addEventListener("keypress", function onPress(event) {
 
 
 
+
+//Load menu items in before attaching click
+//https://stackoverflow.com/questions/12923942/d3-js-binding-an-object-to-data-and-appending-for-each-key
+var menuitems = d3.select('.dropdown-menu')
+
+menuitems.selectAll('li')
+        .data(storyguide)
+        .enter()
+        .append('a')
+        .attr('class', 'dropdown-item')
+        .attr('href', '#')
+        .attr('index', function (d, i) {
+            return i
+        })
+        .text(function (d, i) {
+            return d.menutext
+        })
+
+
+
+
+//Story dropdown menu item listener
+//https://stackoverflow.com/questions/40874786/getting-value-from-selected-bootstrap-dropdown-option
+$('.dropdown-item').click(function () {
+
+//    console.log($(this).text())
+//    console.log($(this).attr("index"))
+
+    state.storyindex = parseInt($(this).attr("index"), 10)
+
+    story(state.storyindex)
+
+});
+
+
+
+//Story back / forward buttons
+$('#forwardarrow').click(function () {
+
+    //as long as there's another story/guide in the list...
+    if (state.storyindex + 1 <= storyguide.length - 1) {
+
+        story(++state.storyindex)
+
+    }
+
+})
+
+//Story back / forward buttons
+$('#backarrow').click(function () {
+
+    //Not back beyond zero. index starts at minus 1 when loaded.
+    if (state.storyindex - 1 >= 0) {
+
+        story(--state.storyindex)
+
+    }
+
+})
+
+
+
 function yearChanged() {
 
-    state.year = state.year === "2019" ? "2015" : "2019"
+//    state.year = state.year === "2019" ? "2015" : "2019"
     updateEnglandMap()
 
     updateLocalAuthorityMap(state.topgeofeatures, state.toppath, "top")
@@ -548,7 +613,7 @@ function load() {
         englandgeofeatures = data
 
         width = 500
-        height = 700
+        height = 650
 
         //Getting the local authority centred.
         //https://stackoverflow.com/questions/28141812/d3-geo-responsive-frame-given-a-geojson-object/28142611#28142611
@@ -633,7 +698,7 @@ function load() {
             overlaygeofeatures = data
 
             width = 500
-            height = 700
+            height = 650
 
             //All the same code as for main map
             //https://stackoverflow.com/questions/28141812/d3-geo-responsive-frame-given-a-geojson-object/28142611#28142611
@@ -672,9 +737,116 @@ function load() {
 
 
 
+}
+
+
+
+function story(index) {
+
+    console.log("story " + index)
+
+    //replace text
+    //$(".storytext").text(storyguide[index].storytext);
+    //Using replace version so we can have HTML in there.
+    $(".storytext").replaceWith("<p class = \"storytext\">" + storyguide[index].storytext + "</p>");
+
+    //Interpret commands
+    if (storyguide[index].year != state.year) {
+
+        state.year = storyguide[index].year
+        yearChanged()
+
+    }
+
+
+
+
+
+
+    if (storyguide[index].topmapselection !== state.topmapselection) {
+
+        state.topmapselection = storyguide[index].topmapselection
+
+        d3.selectAll(".topmap_path")
+                .remove()
+
+        //make sure any existing lines are removed
+        d3.selectAll(".topsidebarline")
+                .remove()
+
+
+        loadMapData(state.topmapselection, "top")
+        updateEnglandMap()
+
+    }
+
+
+
+
+
+    if (storyguide[index].bottommapselection !== state.bottommapselection) {
+
+        state.bottommapselection = storyguide[index].bottommapselection
+
+        d3.selectAll(".bottommap_path")
+                .remove()
+
+        //make sure any existing lines are removed
+        d3.selectAll(".bottomsidebarline")
+                .remove()
+
+
+        loadMapData(state.bottommapselection, "bottom")
+        updateEnglandMap()
+
+    }
+
+
+
+
+    if (storyguide[index].hexmapvar !== state.hexmapvar) {
+
+        state.hexmapvar = storyguide[index].hexmapvar
+
+        $(".hexmap").removeClass('buttonselected')
+        $("#hexmap_" + state.hexmapvar).addClass('buttonselected');
+
+        updateEnglandMap()
+
+    }
+
+
+    if (storyguide[index].difftoggle !== state.difftoggle) {
+
+        state.difftoggle = storyguide[index].difftoggle
+
+        if (state.difftoggle === "diff") {
+            $("#difftoggle").addClass('buttonselected')
+        } else {
+            $("#difftoggle").removeClass('buttonselected')
+        }
+
+        updateEnglandMap()
+
+    }
+
+
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
