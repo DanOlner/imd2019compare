@@ -14,72 +14,97 @@
         <link rel="stylesheet" href="css/jquery-ui.css">
     </head>
     <body>
-        
-        <div id ="interactions">
-            <button class="button buttonselected" value="top">Set top map</button>
-            <button class="button" value="bottom">Set bottom map</button>
-            <label for="tags">Choose local authority from map below or start typing here then select: </label>
-            <input id="tags">
-        </div>
+        <div class="wholepage">
+            <div id ="interactions">
+                <button class="button buttonselectedtop" value="top">Set top map</button>
+                <button class="button" value="bottom">Set bottom map</button>
+                <label for="tags">Choose local authority from England map or start typing here then select: </label>
+                <input id="tags">
+            </div>
 
-        <div class = "mapdiv">
+            <div class = "mapdiv" style = "position: relative;">
 
-            <svg class="map" width="1800px" height="1100px">
-
-            <!--initially for graph of wage multiple over time but reusable-->
-            <!--            <g class="box1" transform = "translate(100,50)">
-                        <g class="graphlines"></g>
-                        <g class="yearaxis"></g>
-                        <g class="yaxis"></g>
-                        </g>-->
-
-
-            <!--England LAD hexmap and name translate together-->
-            <g class="engmap_n_LAname" transform = "translate(0,0)">
-            <g class="enghexmap">
-            <!--England hexmap paths added here-->
-            </g>
-            <!--Text position relative to map, at bottom-->
-            <text id = "nameofla" x ="200" y="700" font-size="40px" fill="black" fill-opacity="0.5" text-anchor="left"></text>
-            </g>
+                <!--absolute-position buttons for hexmap-->
+                <button class="absolute" id="yearbutton" value="year">change year</button>
+                <button class="absolute hexmap" id="hexmap_mean" value="mean">mean</button>
+                <button class="absolute hexmap buttonselected" id="hexmap_median" value="median">median</button>
+                <button class="absolute hexmap" id="hexmap_lowest" value="lowest">lowest</button>
+                <button class="absolute hexmap" id="hexmap_highest" value="highest">highest</button>
+                <button class="absolute" id="difftoggle" value="diff">diff</button>
 
 
-            <!--translate both map and sidebar-->
-            <g class="topmapandsidebar" transform = "translate(500,0)">
-            <g class="topmap">
+                <svg class="map" width="1800px" height="1100px">
+
+                <!--initially for graph of wage multiple over time but reusable-->
+                <!--            <g class="box1" transform = "translate(100,50)">
+                            <g class="graphlines"></g>
+                            <g class="yearaxis"></g>
+                            <g class="yaxis"></g>
+                            </g>-->
 
 
-            <!--TOP map paths added here-->
-
-            <!--translate sidebar relative to map/sidebar container-->
-            <g id="topsidebar" transform = "translate(590,10)">
-            <rect id = "topsidebarrect" width = "35" height = "800"></rect>            
-            </g>
-            
-            <!--NOTE! "BOTTOM" SIDEBAR IS ACTUALLY TO THE RIGHT OF THE OTHER SIDE BAR. So position relatively here.-->
-            <g id="bottomsidebar" transform = "translate(640,10)">
-            <rect id = "bottomsidebarrect" width = "35" height = "800"></rect>            
-            </g>
-
-
-            </g>
-            </g>
-            
-            
-            <g class="bottommapandsidebar" transform = "translate(500,400)">
-            <g class="bottommap">
+                <!--England LAD hexmap and name translate together-->
+                <g class="engmap_n_LAname" transform = "translate(0,0)">
+                <g class="enghexmap">
+                <!--England hexmap paths added here-->
+                </g>
+                <g class="overlayhexmap">
+                <!--England overlay hexmap paths added here-->
+                </g>
+                <!--Text position relative to map, near top-->
+                <text id = "year" x ="300" y="100" font-size="70px" fill="black" fill-opacity="0.25" text-anchor="left"></text>
+                <!--Text position relative to map, at bottom-->
+                <text id = "nameofla" x ="200" y="700" font-size="40px" fill="black" fill-opacity="0.5" text-anchor="left"></text>
+                </g>
 
 
-            <!--BOTTOM map paths added here-->
-
-            </g>
-            </g>
-
-            <!--Get selection appearing drawn over top of map-->
-            <g id="topselect" transform = "translate(400,0)"></g>
+                <!--translate both map and sidebar-->
+                <g class="topmapandsidebar" transform = "translate(500,0)">
+                <g class="topmap">
 
 
-            </svg>
+                <!--TOP map paths added here-->
+                <text id = "topmapname" x ="100" y="400" font-size="25px" fill="black" fill-opacity="0.7" text-anchor="left"></text>
+
+                <!--translate sidebar relative to map/sidebar container-->
+                <g id="topsidebar" transform = "translate(590,10)">
+                <rect id = "topsidebarrect" width = "35" height = "800"></rect>            
+                </g>
+
+                <!--NOTE! "BOTTOM" SIDEBAR IS ACTUALLY TO THE RIGHT OF THE OTHER SIDE BAR. So position relatively here.-->
+                <g id="bottomsidebar" transform = "translate(640,10)">
+                <rect id = "bottomsidebarrect" width = "35" height = "800"></rect>            
+                
+                <!--Then include text saying what sidebar shows. X and Y are reversed when rotating - whole frame is rotated-->
+                <text x="200" y="-50" transform="rotate(90)" font-size="20px" fill="black" fill-opacity="0.7">< less deprived</text>
+                <text x="450" y="-50" transform="rotate(90)" font-size="20px" fill="black" fill-opacity="0.7">more deprived ></text>
+                
+                </g>
+                
+
+
+                </g>
+                </g>
+
+
+                <g class="bottommapandsidebar" transform = "translate(500,400)">
+                <g class="bottommap">
+
+
+                <!--BOTTOM map paths added here-->
+                <text id = "bottommapname" x ="100" y="400" font-size="25px" fill="black" fill-opacity="0.7" text-anchor="left"></text>
+
+
+
+                </g>
+                </g>
+
+                <!--Get selection appearing drawn over top of map-->
+                <g id="topselect" transform = "translate(400,0)"></g>
+
+
+                </svg>
+            </div>
         </div>
 
         <script type="text/javascript" src="main.js"></script>		        
