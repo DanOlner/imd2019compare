@@ -2,6 +2,7 @@ var state = {
     storyindex: -1, //first use will go to zero and get that. Obv, pass if going backwards
     zonehoveredover: null,
     setwhichmap: "top", //top or bottom
+    decile_or_rank: "Rank", //show deciles or exact lines at IMD rank. Use "Decile" and "Rank" to match col names (will have year added to complete col name)
     topmapselection: "Sheffield",
     bottommapselection: "Manchester",
     hexmapvar: "median",
@@ -13,44 +14,38 @@ var state = {
     toppath: null//These four above copied in the first topbottom check in loadMapData so year change can update correctly
 }
 
-//Ranges for the diff variables for the hex map (for making correct colour range / splitting at zero)
-//var diffranges = {
-//    meandiff: {
-//        min: -1619.75,
-//        max: 4578.32
-//    },
-//    mediandiff: {
-//        min: -2690,
-//        max: 4334.5
-//    },
-//    lowestdiff: {
-//        min: -4605,
-//        max: 2974
-//    },
-//    highestdiff: {
-//        min: -3161,
-//        max: 5396
-//    }
-//    }
-
+var lookat = null
 
 //https://github.com/d3/d3-scale-chromatic
 //https://github.com/d3/d3-scale#sequential-scales
 //https://observablehq.com/@d3/sequential-scales
 //Domain is full England ranks for IMD
-//var bottom_colours = d3.scaleSequential(d3.interpolatePiYG).domain([1,32844]);
-//var bottom_colours = d3.scaleSequential(d3.interpolateBrBG).domain([1,32844]);
-var bottom_colours = d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844]);
-var top_colours = d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 32844]);
-//var region_colours = d3.scaleSequential(d3.interpolateSinebow).domain([1, 9]);
+
+//Top and bottom map and matching sidebar colours for individual LSOA rank values
+var bottom_colours_rank = d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844]);
+var top_colours_rank = d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 32844]);
+
+
+//Same again, same colour range - but for deciles, so only ten values.
+var bottom_colours_decile = d3.scaleSequential(d3.interpolatePRGn).domain([1, 10]);
+var top_colours_decile = d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 10]);
+
+
+//Easier way to return the correct one - just sum the strings to get these indices:
+var mapcolours = {
+    "topDecile": d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 10]),
+    "bottomDecile": d3.scaleSequential(d3.interpolatePRGn).domain([1, 10]),
+    "topRank": d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 32844]),
+    "bottomRank": d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844])
+}
+
+
 
 //Nine regions: 18 to 1 so actual values only half the scale, not into too light greens
 var region_colours = d3.scaleSequential(d3.interpolateGreens).domain([18, 1]);
 
 //Now using IMD rank values - mean per local authority
-//var LA_IMDmean_colours = d3.scaleSequential(d3.interpolateCubehelixDefault).domain([1,32844]);
 var hexmap_summary_colours = d3.scaleSequential(d3.interpolateRdGy).domain([32844, 1]);
-//var hexmap_summary_colours = d3.scaleSequential(d3.interpolateGreens).domain([1,32844]);
 
 
 //Bespoke ranges for the four 2015-19 differences.
@@ -75,7 +70,29 @@ var diffcolours = {
 //vertical sidebar scale
 //least to most deprived over the range of the bar
 //Might want to set sidebar up programmatically so can have range in one place
-var sideBarVerticalScale = d3.scaleLinear().domain([1, 32844]).range([800, 0])
+var barsize = 800
+
+var sideBarVerticalScale = d3.scaleLinear().domain([1, 32844]).range([barsize, 0])
+
+//Vertical scale for deciles
+//Needs two linear scales
+//First defines decile start position (based on index 1-10) 
+//10 is least deprived and should be at top
+//Top one has to start a tenth away from zero 
+var sideBarVerticalScale_DecileStartPos = d3.scaleLinear().domain([1, 10]).range([barsize, barsize / 10])
+
+//Second: inside each decile, the percentage can span up to 100%.
+//So each can take up a tenth the bar size. 
+//Will be shifted up using the decile index
+//We'll SUBTRACT this from the start pos. So we want:
+//So sideBarVerticalScale_DecilePercent(0) = 0
+//And sideBarVerticalScale_DecilePercent(100) = 80
+var sideBarVerticalScale_DecilePercent = d3.scaleLinear().domain([0, 100]).range([0, barsize / 10])
+
+
+
+
+
 
 
 
@@ -149,6 +166,23 @@ $("#yearbutton").click(function () {
 //    
     state.year = state.year === "2019" ? "2015" : "2019"
     yearChanged()
+
+})
+
+
+
+
+//decile rank toggle button
+$("#decilerank").click(function () {
+
+    state.decile_or_rank = state.decile_or_rank === "Decile" ? "Rank" : "Decile"
+
+    //Sidebars will need clearing
+    d3.selectAll(".topsidebarline").remove()
+    d3.selectAll(".bottomsidebarline").remove()
+    d3.selectAll(".sidebartext").remove()
+    
+    updateAllMapsAndSidebars()
 
 })
 
@@ -236,13 +270,20 @@ function yearChanged() {
 //    state.year = state.year === "2019" ? "2015" : "2019"
     updateEnglandMap()
 
+    updateAllMapsAndSidebars()
+
+    setYear()
+
+}
+
+
+function updateAllMapsAndSidebars() {
+
     updateLocalAuthorityMap(state.topgeofeatures, state.toppath, "top")
     updateLocalAuthorityMap(state.bottomgeofeatures, state.bottompath, "bottom")
 
     updateSidebar(state.topgeofeatures, "top")
     updateSidebar(state.bottomgeofeatures, "bottom")
-
-    setYear()
 
 }
 
@@ -391,7 +432,7 @@ function updateLocalAuthorityMap(geofeatures, path, topbottom) {
     var lamap = d3.select(selection)
             .selectAll("path")
             .data(geofeatures.features, function (d) {
-                return (d.properties.name)
+                return (d.properties.code)
             })
 
     lamap.enter().append("path")
@@ -404,11 +445,15 @@ function updateLocalAuthorityMap(geofeatures, path, topbottom) {
             .transition()
             .duration(750)
             .style("fill", function (d) {
-                if (topbottom == "top") {
-                    return(top_colours(d.properties["Value" + state.year]))
-                } else {
-                    return(bottom_colours(d.properties["Value" + state.year]))
-                }
+
+                //Get colour interpolator based on joined string. Then pass in correct property based on another joined string
+                return mapcolours[topbottom + state.decile_or_rank](d.properties[state.decile_or_rank + state.year])
+
+//                if (topbottom == "top") {
+//                    return(top_colours_rank(d.properties["Rank" + state.year]))
+//                } else {
+//                    return(bottom_colours_rank(d.properties["Rank" + state.year]))
+//                }
             })
 
 
@@ -446,54 +491,240 @@ function updateLocalAuthorityMap(geofeatures, path, topbottom) {
 
 function updateSidebar(geofeatures, topbottom) {
 
-    var selection = null
-    var classpath = null
 
-    if (topbottom == "top") {
-        selection = "g#topsidebar"
-        classpath = "topsidebarline"
-    } else {
-        selection = "g#bottomsidebar"
-        classpath = "bottomsidebarline"
-    }
+    //If sidebar is showing deciles, pull out decile values
+    //Previously made in R. 
+    //Will see if it's fast enough, otherwise can do faster messier version
 
 
-    var linez = d3.select(selection)
-            .selectAll("line")
-            .data(geofeatures.features)
+    if (state.decile_or_rank === "Decile") {
+
+        //Pull out IMD rank into single array
+        //https://stackoverflow.com/questions/47852270/how-to-extract-value-of-nested-object-array
+        var result = geofeatures.features.filter(a => a.properties).reduce((acc, a) => {
+            return acc.concat(a.properties)
+        }, []).map(a => a["Decile" + state.year]);
 
 
-    linez
-            .enter()
-            .append("line")
-            .attr("class", classpath)
-            .attr("id", function (d, i) {
+//        lookat = geofeatures
+
+        //Get count of unique values
+        //https://stackoverflow.com/a/49156466/5023561
+        var uniqs = result.reduce((acc, val) => {
+            acc[val] = acc[val] === undefined ? 1 : acc[val] += 1;
+            return acc;
+        }, {});
+//        console.log(uniqs)
+
+        //then find as proportion of whole. We have number of LSOAs from geofeatures
+        for (var property in uniqs) {
+            if (uniqs.hasOwnProperty(property)) {
+                uniqs[property] /= geofeatures.features.length
+                uniqs[property] *= 100
+            }
+        }
+
+
+        //Pull out into array. Need to iterate over - if missing, had no counts
+        //So need to set to zero.
+        var decileprops = new Array(10)
+
+        //Confusing so take note: the array is normal indexing 0-9.
+        //The *object* contains a key for the decile number 1-10. So when using below
+        //ADD ONE TO GET DECILE
+        //(And subtract here to get correct array assignment)
+        for (var i = 1; i < 11; i++) {
+
+            if (typeof uniqs[i] === "undefined") {
+                decileprops[i - 1] = 0
+            } else {
+                decileprops[i - 1] = uniqs[i]
+            }
+        }
+
+        lookat = decileprops
+
+
+
+        //SET UP DECILE VIZ IN BARS
+        var selection = null
+        var classpath = null
+
+        if (topbottom == "top") {
+//            selection = "#topsidebarrect"
+            selection = "g#topsidebar_for_deciles"
+            classpath = "topsidebarline"
+        } else {
+//            selection = "#bottomsidebarrect"
+            selection = "g#bottomsidebar_for_deciles"
+            classpath = "bottomsidebarline"//keep same so can be removed
+        }
+
+
+
+
+
+
+        var barz = d3.select(selection)
+                .selectAll("rect")
+                .data(decileprops)
+
+        barz
+                .enter()
+                .append("rect")
+                .attr("class", classpath)
+                .attr("id", function (d, i) {
+                    return("decileindex_" + (i + 1))
+                })
+
+                .merge(barz)
+                .transition()
+                .duration(750)
+
+
+                //The x attribute defines the left position of the rectangle
+                //The y attribute defines the top position of the rectangle
+                .attrs({
+                    "x": 1,
+                    "y": function (d, i) {
+
+                        //decile is i+1
+                        //y is top left of bar so measures percent
+                        //Get starting position first - will need to add to that with index to position
+                        //Then SUBTRACT the percent mapped value
+                        return sideBarVerticalScale_DecileStartPos(i + 1) - sideBarVerticalScale_DecilePercent(d)
+
+                    },
+                    "width": 33,
+
+                    "height": function (d, i) {
+
+                        //Height will take us down to the zero-base of the bar since it started at the top.
+                        //Height is relative to y position, obv.
+                        return sideBarVerticalScale_DecileStartPos(i + 1) - (sideBarVerticalScale_DecileStartPos(i + 1) - sideBarVerticalScale_DecilePercent(d))
+
+                    }
+                })
+                .attr("stroke-width", 0)
+                .attr("fill", function (d, i) {
+
+                    //decile will be index+1
+
+                    return mapcolours[topbottom + state.decile_or_rank](i + 1)
+
+                })
+
+
+
+
+
+
+
+        //ADD TEXT OF PERCENTAGES
+        if (topbottom == "top") {
+            selection = "g#topsidebar_for_percenttext"
+        } else {
+            selection = "g#bottomsidebar_for_percenttext"            
+        }
+
+            classpath = "sidebartext"
+            
+
+        var textz = d3.select(selection)
+                .selectAll("text")
+                .data(decileprops)
+
+        textz
+                .enter()
+                .append("text")
+                .attr("class", classpath)
+                .attr("id", function (d, i) {
+                    return("textdecileindex_" + (i + 1))
+                })
+
+                .merge(textz)
+                .text(function (d) {
+                    return (Math.round(d) + "%")
+                })
+                .attr("stroke", 255)
+                .attr("fill", "rgb(100,100,100)")
+                .attr("font-size", "14px")
+                .attr("font-family", "sans-serif")
+                .attr("text-anchor", "middle")
+                .attrs({
+                    "x": 17,
+                    "y": function (d, i) {
+
+                        //decile is i+1
+                        //y is top left of bar so measures percent
+                        //Get starting position first - will need to add to that with index to position
+                        //Then SUBTRACT the percent mapped value
+                        return sideBarVerticalScale_DecileStartPos(i + 1) - (barsize / 10 / 2)
+
+                    }
+                })
+
+
+
+
+
+    } else {//Show individual rank positions
+
+        var selection = null
+        var classpath = null
+
+        if (topbottom == "top") {
+            selection = "g#topsidebar"
+            classpath = "topsidebarline"
+        } else {
+            selection = "g#bottomsidebar"
+            classpath = "bottomsidebarline"
+        }
+
+
+        var linez = d3.select(selection)
+                .selectAll("line")
+                .data(geofeatures.features)
+
+
+        linez
+                .enter()
+                .append("line")
+                .attr("class", classpath)
+                .attr("id", function (d, i) {
 //                    window.console.log(i);
-                return("lsoaindex" + i)
-            })
+                    return("lsoaindex" + i)
+                })
 
-            .merge(linez)
-            .transition()
-            .duration(750)
-            .attrs({
-                x1: 1,
-                y1: function (d) {
-                    return(Math.round(sideBarVerticalScale(d.properties["Value" + state.year])))
-                },
-                x2: 34,
-                y2: function (d) {
-                    return(Math.round(sideBarVerticalScale(d.properties["Value" + state.year])))
-                }
-            })
-            .attr("stroke-width", 2)
-            .attr("stroke", function (d) {
-                if (topbottom == "top") {
-                    return(top_colours(d.properties["Value" + state.year]))
-                } else {
-                    return(bottom_colours(d.properties["Value" + state.year]))
-                }
-            })
+                .merge(linez)
+                .transition()
+                .duration(750)
+                .attrs({
+                    x1: 1,
+                    y1: function (d) {
+                        return(Math.round(sideBarVerticalScale(d.properties["Rank" + state.year])))
+                    },
+                    x2: 34,
+                    y2: function (d) {
+                        return(Math.round(sideBarVerticalScale(d.properties["Rank" + state.year])))
+                    }
+                })
+                .attr("stroke-width", 2)
+                .attr("stroke", function (d) {
+
+                    //Get colour interpolator based on joined string. Then pass in correct property based on another joined string
+                    return mapcolours[topbottom + state.decile_or_rank](d.properties[state.decile_or_rank + state.year])
+
+
+//                if (topbottom == "top") {
+//                    return(top_colours_rank(d.properties["Rank" + state.year]))
+//                } else {
+//                    return(bottom_colours_rank(d.properties["Rank" + state.year]))
+//                }
+                })
 //            .attr("stroke-opacity", 0.7)
+
+    }
 
 
 }
@@ -537,6 +768,8 @@ function loadMapData(laname, topbottom) {
 
         //for later use 
         var geofeatures = data
+
+        lookat = geofeatures
 
         width = 600
         height = 400

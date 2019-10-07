@@ -50,21 +50,21 @@
                 <div class="dropup absoluteup">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Examples</button>
                     <div class="dropdown-menu">
-<!--                        <li><a class="dropdown-item" index = "0" href="#">HTML</a></li>
-                        <li><a class="dropdown-item" index = "1" href="#">CSS</a></li>
-                        <li><a class="dropdown-item" index = "2" href="#">JavaScript</a></li>-->
+                        <!--                        <li><a class="dropdown-item" index = "0" href="#">HTML</a></li>
+                                                <li><a class="dropdown-item" index = "1" href="#">CSS</a></li>
+                                                <li><a class="dropdown-item" index = "2" href="#">JavaScript</a></li>-->
                     </div>
                 </div>
 
 
-                <!--absolute-position buttons for hexmap-->
-                <button class="absolute" id="yearbutton" value="year">change year</button>
-                <button class="absolute hexmap" id="hexmap_mean" value="mean">mean</button>
-                <button class="absolute hexmap buttonselected" id="hexmap_median" value="median">median</button>
-                <button class="absolute hexmap" id="hexmap_lowest" value="lowest">lowest</button>
-                <button class="absolute hexmap" id="hexmap_highest" value="highest">highest</button>
-                <button class="absolute" id="difftoggle" value="diff">diff 15-19</button>
-
+                    <button class="absolute" id="yearbutton" value="year">change year</button>
+                    <button class="absolute" id="decilerank" value="decilerank">rank/deciles</button>
+                    <button class="absolute hexmap" id="hexmap_mean" value="mean">mean</button>
+                    <button class="absolute hexmap buttonselected" id="hexmap_median" value="median">median</button>
+                    <button class="absolute hexmap" id="hexmap_lowest" value="lowest">lowest</button>
+                    <button class="absolute hexmap" id="hexmap_highest" value="highest">highest</button>
+                    <button class="absolute" id="difftoggle" value="diff">diff 15-19</button>
+                
 
                 <svg class="map" width="1800px" height="1100px">
 
@@ -100,19 +100,30 @@
                 <text class="svgtxt" id = "topmapname" x ="100" y="400" font-size="25px" fill="black" fill-opacity="0.7" text-anchor="left"></text>
 
                 <!--translate sidebar relative to map/sidebar container-->
-                <g id="topsidebar" transform = "translate(590,10)">
-                <rect id = "topsidebarrect" width = "35" height = "800"></rect>            
+                <!--9 and 802 to leave a pixel gap around edges-->
+                <g id="topsidebar" transform = "translate(590,9)">
+                <rect id = "topsidebarrect" width = "35" height = "802"></rect>            
                 </g>
+                
+                <!--To keep from losing original rects-->
+                <g id="topsidebar_for_deciles" transform = "translate(590,10)"></g>
+                <!--And for keeping percent text on top!-->
+                <g id="topsidebar_for_percenttext" transform = "translate(590,10)"></g>
 
                 <!--NOTE! "BOTTOM" SIDEBAR IS ACTUALLY TO THE RIGHT OF THE OTHER SIDE BAR. So position relatively here.-->
-                <g id="bottomsidebar" transform = "translate(640,10)">
-                <rect id = "bottomsidebarrect" width = "35" height = "800"></rect>            
-
+                <g id="bottomsidebar" transform = "translate(640,9)">
+                <rect id = "bottomsidebarrect" width = "35" height = "802"></rect>      
+                
                 <!--Then include text saying what sidebar shows. X and Y are reversed when rotating - whole frame is rotated-->
                 <text class="svgtxt" x="200" y="-50" transform="rotate(90)" font-size="20px" fill="black" fill-opacity="0.7">< less deprived</text>
                 <text class="svgtxt" x="450" y="-50" transform="rotate(90)" font-size="20px" fill="black" fill-opacity="0.7">more deprived ></text>
 
                 </g>
+                
+                <!--To keep from losing original rects-->
+                <g id="bottomsidebar_for_deciles" transform = "translate(640,10)"></g>
+                <!--And for keeping percent text on top!-->
+                <g id="bottomsidebar_for_percenttext" transform = "translate(640,10)"></g>
 
 
 
