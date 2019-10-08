@@ -56,6 +56,17 @@ It is consistently less-deprived across the whole local authority.",
         difftoggle: ""
     },
     {
+        menutext: "Highest example",
+        storytext: "<b>\"Highest\"</b> colours the map based on the highest-ranked zone in each local authority. \n\
+    Darker reds all have plenty in the least-deprived decile. As the colours become pinker, \n\
+    the \"highest\" becomes lower - many lighter ones have no zones in the least deprived decile, as shown here on opposite sides of the country.",
+        year: 2019,
+        topmapselection: "Fenland",
+        bottommapselection: "West Somerset",
+        hexmapvar: "highest",
+        difftoggle: ""
+    },
+    {
         menutext: "Badgers2",
         storytext: "Armpits and other things of that nature",
         year: 2015,
@@ -67,19 +78,3 @@ It is consistently less-deprived across the whole local authority.",
     
 ]
 
-//var storyguide = {
-//    
-//    0:{
-//        menutext: "Badgers",
-//        storytext: "Armpits",
-//        code: "don't break anything"
-//    },
-//    
-//    1:{
-//        menutext: "Badgers2",
-//        storytext: "Armpits2",
-//        code: "don't break anything2"
-//    }
-//    
-//}
-//
