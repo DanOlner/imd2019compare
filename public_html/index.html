@@ -17,13 +17,6 @@
     <body>
         <div class="wholepage">
             <div id ="interactions">
-                <!--                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Examples
-                                    <span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" index = "0" href="#">HTML</a></li>
-                                    <li><a class="dropdown-item" index = "1" href="#">CSS</a></li>
-                                    <li><a class="dropdown-item" index = "2" href="#">JavaScript</a></li>
-                                </ul>-->
                 <button class="button buttonselectedtop" value="top">Set top map</button>
                 <button class="button" value="bottom">Set bottom map</button>
                 <label for="tags">Choose local authority from England map or start typing here then select: </label>
@@ -56,15 +49,17 @@
                     </div>
                 </div>
 
+                <!--values here match variable names in the hexmap geojson-->
+                <button class="absolute" id="yearbutton" value="year">change year</button>
+                <button class="absolute" id="decilerank" value="decilerank">rank/deciles</button>
+                <button class="absolute hexmap" id="hexmap_mean" value="mean">mean</button>
+                <button class="absolute hexmap buttonselected" id="hexmap_median" value="median">median</button>
+                <button class="absolute hexmap" id="hexmap_percentbottom" value="decile1prop">% bottom decile</button>
+                <button class="absolute hexmap" id="hexmap_percenttop" value="decile10prop">% top decile</button>
+                <button class="absolute hexmap" id="hexmap_lowest" value="lowest">lowest</button>
+                <button class="absolute hexmap" id="hexmap_highest" value="highest">highest</button>
+                <button class="absolute" id="difftoggle" value="diff">diff 15-19</button>
 
-                    <button class="absolute" id="yearbutton" value="year">change year</button>
-                    <button class="absolute" id="decilerank" value="decilerank">rank/deciles</button>
-                    <button class="absolute hexmap" id="hexmap_mean" value="mean">mean</button>
-                    <button class="absolute hexmap buttonselected" id="hexmap_median" value="median">median</button>
-                    <button class="absolute hexmap" id="hexmap_lowest" value="lowest">lowest</button>
-                    <button class="absolute hexmap" id="hexmap_highest" value="highest">highest</button>
-                    <button class="absolute" id="difftoggle" value="diff">diff 15-19</button>
-                
 
                 <svg class="map" width="1800px" height="1100px">
 
@@ -86,8 +81,7 @@
                 </g>
                 <!--Text position relative to map, near top-->
                 <text class="svgtxt" id = "year" x ="300" y="100" font-size="70px" fill="black" fill-opacity="0.25" text-anchor="left"></text>
-                <!--Text position relative to map, at bottom-->
-                <text class="svgtxt" id = "nameofla" x ="130" y="650" font-size="40px" fill="black" fill-opacity="0.5" text-anchor="left"></text>
+       
                 </g>
 
 
@@ -97,14 +91,13 @@
 
 
                 <!--TOP map paths added here-->
-                <text class="svgtxt" id = "topmapname" x ="100" y="400" font-size="25px" fill="green" fill-opacity="0.7" text-anchor="left"></text>
-
+                
                 <!--translate sidebar relative to map/sidebar container-->
                 <!--9 and 802 to leave a pixel gap around edges-->
                 <g id="topsidebar" transform = "translate(590,9)">
                 <rect id = "topsidebarrect" width = "35" height = "802"></rect>            
                 </g>
-                
+
                 <!--To keep from losing original rects-->
                 <g id="topsidebar_for_deciles" transform = "translate(590,10)"></g>
                 <!--And for keeping percent text on top!-->
@@ -113,13 +106,13 @@
                 <!--NOTE! "BOTTOM" SIDEBAR IS ACTUALLY TO THE RIGHT OF THE OTHER SIDE BAR. So position relatively here.-->
                 <g id="bottomsidebar" transform = "translate(640,9)">
                 <rect id = "bottomsidebarrect" width = "35" height = "802"></rect>      
-                
+
                 <!--Then include text saying what sidebar shows. X and Y are reversed when rotating - whole frame is rotated-->
                 <text class="svgtxt" x="200" y="-50" transform="rotate(90)" font-size="20px" fill="black" fill-opacity="0.7">< less deprived</text>
                 <text class="svgtxt" x="450" y="-50" transform="rotate(90)" font-size="20px" fill="black" fill-opacity="0.7">more deprived ></text>
 
                 </g>
-                
+
                 <!--To keep from losing original rects-->
                 <g id="bottomsidebar_for_deciles" transform = "translate(640,10)"></g>
                 <!--And for keeping percent text on top!-->
@@ -136,12 +129,19 @@
 
 
                 <!--BOTTOM map paths added here-->
-                <text class="svgtxt" id = "bottommapname" x ="100" y="400" font-size="25px" fill="blue" fill-opacity="0.7" text-anchor="left"></text>
 
 
 
                 </g>
                 </g>
+
+                <!--just gonna translate this separately to make sure it's over the map-->
+                <text class="svgtxt" id = "topmapname" x ="100" y="400" font-size="30px" fill="blue" fill-opacity="1" text-anchor="left" transform = "translate(500,0)"></text>
+                
+                <text class="svgtxt" id = "bottommapname" x ="100" y="400" font-size="30px" fill="green" fill-opacity="1" text-anchor="left" transform = "translate(500,400)"></text>
+                
+                <!--hexmap text here to make sure above other elements also-->
+                <text class="svgtxt" id = "nameofla" x ="120" y="610" font-size="40px" fill="rgb(75,75,75)" text-anchor="left"></text>
 
                 <!--Get selection appearing drawn over top of map-->
                 <g id="topselect" transform = "translate(400,0)"></g>

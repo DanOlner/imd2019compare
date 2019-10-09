@@ -17,7 +17,7 @@ div.story {
 
     position:absolute;
     left:20px;
-    top:670px;
+    top:640px;
     /*background-color: rgb(130,130,130);*/
     width: 570px;
 
@@ -70,11 +70,11 @@ https://jsfiddle.net/adeneo/72LvL8n6/*/
 
 
 button.buttonselectedtop {
-    background: green;
+    background: blue;
     color: white;
 }
 button.buttonselectedbottom {
-    background: blue;
+    background: green;
     color: white;
 }
 
@@ -115,22 +115,36 @@ button#hexmap_mean{
     left: 0px;
     top: 140px;
 }
+
 button#hexmap_median{    
     left: 0px;
     top: 175px;
 }
-button#hexmap_lowest{    
+
+button#hexmap_percentbottom{    
     left: 0px;
     top: 210px;
 }
-button#hexmap_highest{    
+
+button#hexmap_percenttop{    
     left: 0px;
     top: 245px;
 }
 
+
+
+button#hexmap_lowest{    
+    left: 0px;
+    top: 280px;
+}
+button#hexmap_highest{    
+    left: 0px;
+    top: 315px;
+}
+
 button#difftoggle{    
     left: 0px;
-    top: 300px;
+    top: 370px;
 }
 
 

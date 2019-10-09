@@ -15,6 +15,7 @@ var state = {
 }
 
 var lookat = null
+var hexheight = 600
 
 //https://github.com/d3/d3-scale-chromatic
 //https://github.com/d3/d3-scale#sequential-scales
@@ -32,6 +33,7 @@ var top_colours_decile = d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 10]
 
 
 //Easier way to return the correct one - just sum the strings to get these indices:
+//These are for the top and bottom local authority maps and their matching sidebars
 var mapcolours = {
     "topDecile": d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 10]),
     "bottomDecile": d3.scaleSequential(d3.interpolatePRGn).domain([1, 10]),
@@ -40,12 +42,56 @@ var mapcolours = {
 }
 
 
+//Get scale range from data when variable selection changes
+//Store here
+//In setEnglandMapColourScale()
+var hexmapcolourscale = null
+
+
+
 
 //Nine regions: 18 to 1 so actual values only half the scale, not into too light greens
 var region_colours = d3.scaleSequential(d3.interpolateGreens).domain([18, 1]);
 
-//Now using IMD rank values - mean per local authority
+//IMD rank values - for summary vars per local authority: mean, median, lowest, highest
 var hexmap_summary_colours = d3.scaleSequential(d3.interpolateRdGy).domain([32844, 1]);
+
+
+//Colour scales for the (all different) proportion of LSOAs in 1st and 10th deciles of each local authority
+//Other hexmap vars (apart from diffs) can all be rank range (32844)
+//Update: trying variable scale for lowest, highest too, see how it looks
+//These all start at zero
+//Hopefully a little time saving over finding programmatically?
+//https://observablehq.com/@d3/diverging-scales
+//var hexdecilecolours = {
+//
+//    lowest2015: d3.scaleSequential()
+//            .domain([1, 21789])
+//            .interpolator(d3.interpolateRdGy),
+//    highest2015: d3.scaleSequential()
+//            .domain([17716, 32844])
+//            .interpolator(d3.interpolateRdGy),
+//    lowest2019: d3.scaleSequential()
+//            .domain([0, 48.83721])
+//            .interpolator(d3.interpolateRdGy),
+//    highest2019: d3.scaleSequential()
+//            .domain([0, 48.83721])
+//            .interpolator(d3.interpolateRdGy),
+//
+//    decile1prop2015: d3.scaleSequential()
+//            .domain([0, 48.83721])
+//            .interpolator(d3.interpolateRdGy),
+//    decile1prop2019: d3.scaleSequential()
+//            .domain([0, 48.83721])
+//            .interpolator(d3.interpolateRdGy),
+//    decile10prop2015: d3.scaleSequential()
+//            .domain([0, 73.68421])
+//            .interpolator(d3.interpolateRdGy),
+//    decile10prop2019: d3.scaleSequential()
+//            .domain([0, 66.66667])
+//            .interpolator(d3.interpolateRdGy)
+//}
+//
 
 
 //Bespoke ranges for the four 2015-19 differences.
@@ -63,6 +109,12 @@ var diffcolours = {
             .interpolator(d3.interpolatePuOr),
     highest: d3.scaleDiverging()
             .domain([-3161, 0, 5396])
+            .interpolator(d3.interpolatePuOr),
+    decile1prop: d3.scaleDiverging()
+            .domain([-22.222222, 0, 7.801418])
+            .interpolator(d3.interpolatePuOr),
+    decile10prop: d3.scaleDiverging()
+            .domain([-11.47541, 0, 26.08696])
             .interpolator(d3.interpolatePuOr)
 }
 
@@ -125,6 +177,8 @@ $(".hexmap").click(function () {
     $(this).addClass('buttonselected');
 
     state.hexmapvar = this.value
+
+    setEnglandMapColourScale()
     updateEnglandMap()
 
 })
@@ -144,6 +198,7 @@ $("#difftoggle").click(function () {
 
     }
 
+    setEnglandMapColourScale()
     updateEnglandMap()
 
 })
@@ -181,7 +236,7 @@ $("#decilerank").click(function () {
     d3.selectAll(".topsidebarline").remove()
     d3.selectAll(".bottomsidebarline").remove()
     d3.selectAll(".sidebartext").remove()
-    
+
     updateAllMapsAndSidebars()
 
 })
@@ -264,10 +319,63 @@ $('#backarrow').click(function () {
 })
 
 
+function setEnglandMapColourScale() {
+
+    //Create appropriate scale from min and max of target variable
+    //See below for stackoverflow link!
+    //Only needs doing once when variable changes
+
+
+    //Different string depending on if diff or not
+    if (state.difftoggle === "diff") {
+        var vartoget = state.hexmapvar + state.difftoggle
+    } else {
+        var vartoget = state.hexmapvar + state.year
+    }
+
+    var result = englandgeofeatures.features.filter(a => a.properties).reduce((acc, a) => {
+        return acc.concat(a.properties)
+    }, []).map(a => a[vartoget]);
+
+    //The decile variables contain markers for displaying as totally black
+    //They warp the min/max, so need replacing again with zero here
+    //Actually, having seen the result, might just leave those zones as is (so this filtering stage would be unnecessary if I just had those as zero!)
+    if (state.hexmapvar === "decile1prop" | state.hexmapvar === "decile10prop") {
+
+        for (var i = 0; i < result.length; i++) {
+            if (result[i] == -999999) {
+                result[i] = 0
+            }
+        }
+
+    }
+
+
+    if (state.difftoggle === "diff") {
+
+        console.log(Math.min.apply(null, result))
+        console.log(Math.max.apply(null, result))
+
+        //diff variables are diverging scales with zero at centre
+        //https://stackoverflow.com/questions/36608611/why-does-math-min1-2-return-nan
+        //Well that's odd! A min finding function that doesn't take an array??
+        hexmapcolourscale = d3.scaleDiverging().domain([Math.min.apply(null, result), 0, Math.max.apply(null, result)]).interpolator(d3.interpolatePuOr)
+
+    } else {
+
+        hexmapcolourscale = d3.scaleSequential(d3.interpolateRdGy).domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
+
+    }
+
+
+}
+
+
 
 function yearChanged() {
 
 //    state.year = state.year === "2019" ? "2015" : "2019"
+    setEnglandMapColourScale()
     updateEnglandMap()
 
     updateAllMapsAndSidebars()
@@ -297,7 +405,7 @@ function updateEnglandMap() {
     var engmap = d3.select("g.enghexmap")
             .selectAll("path")
             .data(englandgeofeatures.features, function (d) {
-                return (d.properties.c)
+                return (d.properties.n)
             })
 
     engmap.enter().append("path")
@@ -312,32 +420,39 @@ function updateEnglandMap() {
 
                     //Have hover colour match the top bottom colour
                     //Some horrible nesting going on here, careful
-                    if (state.setwhichmap == "top") {
+                    if (state.setwhichmap == "bottom") {
                         return("rgb(0,255,0)")
-                    } else if (state.setwhichmap == "bottom") {
+                    } else if (state.setwhichmap == "top") {
                         return("rgb(0,0,255)")
                     }
                 }//else if next is after if(state.hoveredover...
 
                 //set permanent top bottom marker colour
-                else if (d.properties.n === state.topmapselection) {
+                else if (d.properties.n === state.bottommapselection) {
                     return("rgb(0,255,0)")
-                } else if (d.properties.n === state.bottommapselection) {
+                } else if (d.properties.n === state.topmapselection) {
                     return("rgb(0,0,255)")
                 } else {
 
-                    //if showing 2015-19 diff values, don't append year to var name, use diff instead
+                    //Setting colour scale from the data - variable count getting a bit high to do manually!
+                    //Just need to get right variable name
                     if (state.difftoggle === "diff") {
-//                        return(hexmap_summary_colours(d.properties[state.hexmapvar + "diff"]))
-
-                        //Select correct diverging colour scale
-                        return(
-                                diffcolours[state.hexmapvar](d.properties[state.hexmapvar + "diff"])
-                                )
-
+                        return hexmapcolourscale(d.properties[state.hexmapvar + state.difftoggle])
                     } else {
-                        return(hexmap_summary_colours(d.properties[state.hexmapvar + state.year]))
+                        return hexmapcolourscale(d.properties[state.hexmapvar + state.year])
                     }
+
+//                    //if showing 2015-19 diff values, don't append year to var name, use diff instead
+////                        return(hexmap_summary_colours(d.properties[state.hexmapvar + "diff"]))
+//
+//                        //Select correct diverging colour scale
+//                        return(
+//                                diffcolours[state.hexmapvar](d.properties[state.hexmapvar + "diff"])
+//                                )
+//
+//                    } else {
+//                        return(hexmap_summary_colours(d.properties[state.hexmapvar + state.year]))
+//                    }
 
                 }
             })
@@ -542,7 +657,7 @@ function updateSidebar(geofeatures, topbottom) {
             }
         }
 
-        lookat = decileprops
+//        lookat = decileprops
 
 
 
@@ -624,11 +739,11 @@ function updateSidebar(geofeatures, topbottom) {
         if (topbottom == "top") {
             selection = "g#topsidebar_for_percenttext"
         } else {
-            selection = "g#bottomsidebar_for_percenttext"            
+            selection = "g#bottomsidebar_for_percenttext"
         }
 
-            classpath = "sidebartext"
-            
+        classpath = "sidebartext"
+
 
         var textz = d3.select(selection)
                 .selectAll("text")
@@ -769,9 +884,9 @@ function loadMapData(laname, topbottom) {
         //for later use 
         var geofeatures = data
 
-        lookat = geofeatures
+//        lookat = geofeatures
 
-        width = 600
+        width = 550
         height = 400
 
         //Getting the local authority centred.
@@ -840,13 +955,14 @@ function load() {
     //SET UP ENGLAND LA HEXMAP
 //    d3.json("data/hexmap-lad-england_cleannames_w_meanmedianIMD.geojson").then(function (data) {
 //    d3.json("data/hexmap-lad-england_cleannames_w_meanmedianIMD_2015diffs.geojson").then(function (data) {
-    d3.json("data/hexmap-lad-england_cleannames_w_meanmedian_n_diffs_2015_2019.geojson").then(function (data) {
+//    d3.json("data/hexmap-lad-england_cleannames_w_meanmedian_n_diffs_2015_2019.geojson").then(function (data) {
+    d3.json("data/hexmap-lad-england_cleannames_w_meanmedian_deciles_n_diffs_2015_2019.geojson").then(function (data) {
 
 
         englandgeofeatures = data
 
         width = 500
-        height = 650
+        height = hexheight
 
         //Getting the local authority centred.
         //https://stackoverflow.com/questions/28141812/d3-geo-responsive-frame-given-a-geojson-object/28142611#28142611
@@ -869,7 +985,7 @@ function load() {
                 .scale(s)
                 .translate(t);
 
-
+        setEnglandMapColourScale()
         updateEnglandMap()
 
 
@@ -931,7 +1047,7 @@ function load() {
             overlaygeofeatures = data
 
             width = 500
-            height = 650
+            height = hexheight
 
             //All the same code as for main map
             //https://stackoverflow.com/questions/28141812/d3-geo-responsive-frame-given-a-geojson-object/28142611#28142611

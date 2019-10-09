@@ -14,7 +14,7 @@ var storyguide = [
         menutext: "Highest & lowest median IMD 2019",
         storytext: "You can compare two local authorities (LAs): map colours match the bars. The bars show the IMD rank position of every zone inside those LAs.\n\
 The whole bar covers all England, with most deprived at the bottom. <b>Here, we're looking at the two LAs\n\
-with the highest and lowest <a href=\"https://en.wikipedia.org/wiki/Median\">median</a> IMD in 2019</b>. Their locations are shown on the England map in blue (bottom) and green (top).",
+with the highest and lowest <a href=\"https://en.wikipedia.org/wiki/Median\">median</a> IMD in 2019</b>. Their locations are shown on the England map in blue (top) and green (bottom).",
         year: 2019,
         topmapselection: "Wokingham",
         bottommapselection: "Liverpool",
