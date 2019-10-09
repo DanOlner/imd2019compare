@@ -81,7 +81,7 @@
                 </g>
                 <!--Text position relative to map, near top-->
                 <text class="svgtxt" id = "year" x ="300" y="100" font-size="70px" fill="black" fill-opacity="0.25" text-anchor="left"></text>
-       
+
                 </g>
 
 
@@ -91,7 +91,7 @@
 
 
                 <!--TOP map paths added here-->
-                
+
                 <!--translate sidebar relative to map/sidebar container-->
                 <!--9 and 802 to leave a pixel gap around edges-->
                 <g id="topsidebar" transform = "translate(590,9)">
@@ -135,11 +135,22 @@
                 </g>
                 </g>
 
+                <!--colour scale for hexmap-->
+                <g id = "legendhider" class = "visible" transform = "translate(269,589)">
+                <g class ="legendcontainer">
+                <rect id = "legend" width = "182" height = "22"></rect>      
+                </g>
+                <text x ="6" y="16" font-size="15px" fill="white" fill-opacity="0.7" text-anchor="left">min</text>                
+                <text x ="148" y="16" font-size="15px" fill="white" fill-opacity="0.7" text-anchor="left">max</text>                
+                </g>
+
+
+
                 <!--just gonna translate this separately to make sure it's over the map-->
                 <text class="svgtxt" id = "topmapname" x ="100" y="400" font-size="30px" fill="blue" fill-opacity="1" text-anchor="left" transform = "translate(500,0)"></text>
-                
+
                 <text class="svgtxt" id = "bottommapname" x ="100" y="400" font-size="30px" fill="green" fill-opacity="1" text-anchor="left" transform = "translate(500,400)"></text>
-                
+
                 <!--hexmap text here to make sure above other elements also-->
                 <text class="svgtxt" id = "nameofla" x ="120" y="610" font-size="40px" fill="rgb(75,75,75)" text-anchor="left"></text>
 

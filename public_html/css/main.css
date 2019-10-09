@@ -160,6 +160,14 @@ button#difftoggle{
 }
 
 
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
 
 /*https://css-tricks.com/multiple-class-id-selectors/*/
 /*Difference between avg. line-chart and avg.line-chart*/
@@ -199,6 +207,15 @@ rect#sidebarrect {
     stroke: rgb(0,0,0);
     stroke-width: 1px
 }
+
+rect#legend {
+    fill: rgb(50,50,50);
+    /*fill: rgb(100,100,100);*/
+    /*fill: rgb(255,255,255);*/
+    stroke: rgb(0,0,0);
+    stroke-width: 1px
+}
+
 
 .sidebartext {
 	/*mix-blend-mode: difference;*/

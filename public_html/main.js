@@ -44,79 +44,11 @@ var mapcolours = {
 
 //Get scale range from data when variable selection changes
 //Store here
-//In setEnglandMapColourScale()
+//Set in setEnglandMapColourScale()
 var hexmapcolourscale = null
+var legendscale = null
 
 
-
-
-//Nine regions: 18 to 1 so actual values only half the scale, not into too light greens
-var region_colours = d3.scaleSequential(d3.interpolateGreens).domain([18, 1]);
-
-//IMD rank values - for summary vars per local authority: mean, median, lowest, highest
-var hexmap_summary_colours = d3.scaleSequential(d3.interpolateRdGy).domain([32844, 1]);
-
-
-//Colour scales for the (all different) proportion of LSOAs in 1st and 10th deciles of each local authority
-//Other hexmap vars (apart from diffs) can all be rank range (32844)
-//Update: trying variable scale for lowest, highest too, see how it looks
-//These all start at zero
-//Hopefully a little time saving over finding programmatically?
-//https://observablehq.com/@d3/diverging-scales
-//var hexdecilecolours = {
-//
-//    lowest2015: d3.scaleSequential()
-//            .domain([1, 21789])
-//            .interpolator(d3.interpolateRdGy),
-//    highest2015: d3.scaleSequential()
-//            .domain([17716, 32844])
-//            .interpolator(d3.interpolateRdGy),
-//    lowest2019: d3.scaleSequential()
-//            .domain([0, 48.83721])
-//            .interpolator(d3.interpolateRdGy),
-//    highest2019: d3.scaleSequential()
-//            .domain([0, 48.83721])
-//            .interpolator(d3.interpolateRdGy),
-//
-//    decile1prop2015: d3.scaleSequential()
-//            .domain([0, 48.83721])
-//            .interpolator(d3.interpolateRdGy),
-//    decile1prop2019: d3.scaleSequential()
-//            .domain([0, 48.83721])
-//            .interpolator(d3.interpolateRdGy),
-//    decile10prop2015: d3.scaleSequential()
-//            .domain([0, 73.68421])
-//            .interpolator(d3.interpolateRdGy),
-//    decile10prop2019: d3.scaleSequential()
-//            .domain([0, 66.66667])
-//            .interpolator(d3.interpolateRdGy)
-//}
-//
-
-
-//Bespoke ranges for the four 2015-19 differences.
-//Using diverging scales.
-//https://observablehq.com/@d3/diverging-scales
-var diffcolours = {
-    mean: d3.scaleDiverging()
-            .domain([-1619.75, 0, 4578.32])
-            .interpolator(d3.interpolatePuOr),
-    median: d3.scaleDiverging()
-            .domain([-2690, 0, 4334.5])
-            .interpolator(d3.interpolatePuOr),
-    lowest: d3.scaleDiverging()
-            .domain([-4605, 0, 2974])
-            .interpolator(d3.interpolatePuOr),
-    highest: d3.scaleDiverging()
-            .domain([-3161, 0, 5396])
-            .interpolator(d3.interpolatePuOr),
-    decile1prop: d3.scaleDiverging()
-            .domain([-22.222222, 0, 7.801418])
-            .interpolator(d3.interpolatePuOr),
-    decile10prop: d3.scaleDiverging()
-            .domain([-11.47541, 0, 26.08696])
-            .interpolator(d3.interpolatePuOr)
-}
 
 
 //vertical sidebar scale
@@ -368,6 +300,14 @@ function setEnglandMapColourScale() {
     }
 
 
+    //Recreate colours on legend scale   
+//    legendscale = d3.scaleLinear().domain([Math.min.apply(null, result), Math.max.apply(null, result)]).range([0,180])
+    legendscale = d3.scaleLinear().domain([0, 180]).range([Math.min.apply(null, result), Math.max.apply(null, result)])
+
+    drawLegend()
+
+
+
 }
 
 
@@ -396,6 +336,54 @@ function updateAllMapsAndSidebars() {
 }
 
 
+
+function drawLegend() {
+
+    //Set of lines across the legend, one per two pixels should do huh?
+    //Is currently 180 wide...
+    //https://stackoverflow.com/questions/3751520/how-to-generate-sequence-of-numbers-chars-in-javascript
+    lines = Array(90).fill().map((v, i) => i)
+
+    //Spaced two pixels apart
+    for (var i = 0; i < lines.length; i++) {
+        lines[i] *= 2
+        lines[i] += 1
+    }
+
+
+    var linez = d3.select(".legendcontainer")
+            .selectAll("line")
+            .data(lines)
+
+
+    linez
+            .enter()
+            .append("line")
+            .merge(linez)
+            .attrs({
+                y1: 1,
+                x1: function (d) {
+                    return d + 1
+                },
+                y2: 20,
+                x2: function (d) {
+                    return d + 1
+                }
+            })
+            .attr("stroke-width", 2)
+            .attr("stroke", function (d) {
+
+                //Get colour interpolator based on joined string. Then pass in correct property based on another joined string
+//                    return mapcolours[topbottom + state.decile_or_rank](d.properties[state.decile_or_rank + state.year])
+//                    return("rgb(255,0,0)")
+
+                return hexmapcolourscale(legendscale(d))
+
+
+            })
+
+
+}
 
 
 function updateEnglandMap() {
@@ -457,11 +445,16 @@ function updateEnglandMap() {
                 }
             })
             .on("mouseover", function (d) {
+                $("#legendhider").removeClass('visible')
+                $("#legendhider").addClass('invisible')
                 state.zonehoveredover = d.properties.n
                 setName()
                 updateEnglandMap()
             })
             .on("mouseout", function (d) {
+                $("#legendhider").removeClass('invisible')
+                $("#legendhider").addClass('visible')
+
                 //Get rid of LA name when not hovering over the map
                 state.zonehoveredover = ""
                 setName()
@@ -564,33 +557,8 @@ function updateLocalAuthorityMap(geofeatures, path, topbottom) {
                 //Get colour interpolator based on joined string. Then pass in correct property based on another joined string
                 return mapcolours[topbottom + state.decile_or_rank](d.properties[state.decile_or_rank + state.year])
 
-//                if (topbottom == "top") {
-//                    return(top_colours_rank(d.properties["Rank" + state.year]))
-//                } else {
-//                    return(bottom_colours_rank(d.properties["Rank" + state.year]))
-//                }
             })
 
-
-    //set map names (do that here so it draws after map)
-    //Though I can't for the life of me get that to work...
-
-    //Add programmatically so it comes after/on top of map SVG elements
-    //<text id = "topmapname" x ="100" y="400" font-size="25px" fill="black" fill-opacity="0.7" text-anchor="left"></text>
-//    var selection = topbottom == "top" ? "#topmap" : "#bottommap"
-//    
-//    d3.select(selection)
-//            .selectAll("text")
-//            .enter()
-//            .append("text")
-//            .text("check")
-//            .attr("x", 100)
-//            .attr("y", 400)//this should be relative to parent g...
-//            .attr("font-size","25px")
-//            .attr("fill","black")
-//            .attr("fill-opacity",0.7)
-//            .attr("tex-anchor","left")
-//            
 
 
     var selection = topbottom == "top" ? "#topmapname" : "#bottommapname"
@@ -1125,6 +1093,7 @@ function story(index) {
 
 
         loadMapData(state.topmapselection, "top")
+        setEnglandMapColourScale()
         updateEnglandMap()
 
     }
@@ -1146,6 +1115,7 @@ function story(index) {
 
 
         loadMapData(state.bottommapselection, "bottom")
+        setEnglandMapColourScale()
         updateEnglandMap()
 
     }
@@ -1159,7 +1129,7 @@ function story(index) {
 
         $(".hexmap").removeClass('buttonselected')
         $("#hexmap_" + state.hexmapvar).addClass('buttonselected');
-
+        setEnglandMapColourScale()
         updateEnglandMap()
 
     }
@@ -1174,7 +1144,7 @@ function story(index) {
         } else {
             $("#difftoggle").removeClass('buttonselected')
         }
-
+        setEnglandMapColourScale()
         updateEnglandMap()
 
     }
