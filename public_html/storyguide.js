@@ -11,11 +11,42 @@
 var storyguide = [
     
     {
-        menutext: "Highest & lowest median IMD 2019",
-        storytext: "You can compare two local authorities (LAs): map colours match the bars. The bars show the IMD rank position of every zone inside those LAs.\n\
-The whole bar covers all England, with most deprived at the bottom. <b>Here, we're looking at the two LAs\n\
-with the highest and lowest <a href=\"https://en.wikipedia.org/wiki/Median\">median</a> IMD in 2019</b>. Their locations are shown on the England map in blue (top) and green (bottom).",
+        menutext: "Instructions start",
+        storytext: "You can <b>compare two local authorities side by side.</b> \n\
+Here, the maps of Sheffield and Manchester show LSOAs (the zones used by the IMD) coloured by deprivation index. \n\
+The bars to the right match the map colours - showing exactly where each LSOA is in the IMD rank. \n\
+The bars capture the full index range for England: most deprived zones at the bottom, least deprived at the top. \n\
+<b>Sheffield has an even spread, Manchester has far fewer 'least deprived' zones.</b>",
         year: 2019,
+        decile_or_rank: "Rank",
+        topmapselection: "Sheffield",
+        bottommapselection: "Manchester",
+        hexmapvar: "median",
+        difftoggle: ""
+    },
+    {
+        menutext: "",
+        storytext: "<b>Select a new local authority</b> either by <b>finding it on the England map</b> or <b>typing a part of its name</b> in the autocomplete box at the top. \n\
+To choose which map to change, use the <b>set bottom and top map</b> buttons.\n\
+Use the <b>rank/deciles</b> button to switch the bars between rank and decile view. \n\
+They're now on deciles: they show Sheffield has 19% of its zones in the top two (least deprived) deciles\n\
+while Manchester has none.",
+        year: 2019,
+        decile_or_rank: "Decile",
+        topmapselection: "Sheffield",
+        bottommapselection: "Manchester",
+        hexmapvar: "median",
+        difftoggle: ""
+    },
+    {
+        menutext: "Highest & lowest median IMD 2019",
+        storytext: "<b>The England map shows one of six variables you can select - mean through to highest.</b> Examples of each will follow. \n\
+Here, the England map shows <a href=\"https://en.wikipedia.org/wiki/Median\">median</a> IMD per local authority in 2019</b>. \n\
+High values in deeper red are clustered around the west of London.\n\
+Wokingham has the highest median, Liverpool the lowest.\n\
+ ",
+        year: 2019,
+        decile_or_rank: "Rank",
         topmapselection: "Wokingham",
         bottommapselection: "Liverpool",
         hexmapvar: "median",
@@ -23,7 +54,7 @@ with the highest and lowest <a href=\"https://en.wikipedia.org/wiki/Median\">med
     },
     
     {
-        menutext: "Highest: biggest pos/neg change",
+        menutext: "pos/neg",
         storytext: "The England map can show 4 different values: mean, median, highest and lowest. 'Highest' (shown here) means 'the zone with the highest IMD rank in that LA' and 'lowest'\n\
 vice versa. These two maps show the two LAs where the highest zone changed the most between 2015-19. <b>Click on 'change year' to see.</b>\n\
 Note those two white zones on the England map in NE London. Click on one of them...",

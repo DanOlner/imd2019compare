@@ -17,6 +17,8 @@ var state = {
 var lookat = null
 var hexheight = 600
 
+var storyguide_menusub = []//reduced storyguide with items removed where menuitem field is empty
+
 //https://github.com/d3/d3-scale-chromatic
 //https://github.com/d3/d3-scale#sequential-scales
 //https://observablehq.com/@d3/sequential-scales
@@ -92,11 +94,21 @@ $(".button").click(function () {
         //https://stackoverflow.com/questions/16240892/jquery-change-button-color-onclick
         $(".button").removeClass('buttonselectedtop')
         $(".button").removeClass('buttonselectedbottom')
+
+        //change map text marker
+        $('#marker_bottom').attr('cy', '392');
+        $('#marker_bottom').attr('id', 'marker_top');
+
+
         $(this).addClass('buttonselectedtop');
     } else {
         $(".button").removeClass('buttonselectedtop')
         $(".button").removeClass('buttonselectedbottom')
         $(this).addClass('buttonselectedbottom');
+
+        $('#marker_top').attr('cy', '792');
+        $('#marker_top').attr('id', 'marker_bottom');
+
     }
 
 })
@@ -179,24 +191,46 @@ $("#decilerank").click(function () {
 
 //KEYPRESSES
 //https://stackoverflow.com/a/48855547/5023561
-document.addEventListener("keypress", function onPress(event) {
-    if (event.key === "Y" | event.key === "y") {
-
-        state.year = state.year === "2019" ? "2015" : "2019"
-        yearChanged()
-
-    }
-});
+//document.addEventListener("keypress", function onPress(event) {
+//    if (event.key === "Y" | event.key === "y") {
+//
+//        state.year = state.year === "2019" ? "2015" : "2019"
+//        yearChanged()
+//
+//    }
+//});
 
 
 
 
 //Load menu items in before attaching click
+//Use subset of storyguide - only those with menu items populated:
+//remove items where menuitems string is empty
+//So D3 can easily populate dropdown and we can avoid having all instruction items in it
+//Failed to find a more elegant way!
+//But note this pulls out a boolean array that should in theory be easy to filter with, right?
+//    var hasmenuitem = storyguide.map(function (d, i) {
+//        
+//        if(d.menutext ===""){
+//            return false
+//        } else {
+//            return true
+//        }
+//    });
+
+for (var i = 0; i < storyguide.length; i++) {
+
+    if (storyguide[i].menutext !== "") {
+        storyguide_menusub.push(storyguide[i])
+    }
+
+}
+
 //https://stackoverflow.com/questions/12923942/d3-js-binding-an-object-to-data-and-appending-for-each-key
 var menuitems = d3.select('.dropdown-menu')
 
 menuitems.selectAll('li')
-        .data(storyguide)
+        .data(storyguide_menusub)
         .enter()
         .append('a')
         .attr('class', 'dropdown-item')
@@ -232,7 +266,24 @@ $('#forwardarrow').click(function () {
     //as long as there's another story/guide in the list...
     if (state.storyindex + 1 <= storyguide.length - 1) {
 
+        var previousstoryindex = state.storyindex
+
         story(++state.storyindex)
+
+        //Check if we moved from 0 to 1
+        //Which is 2nd story entry so there's now a first
+        //If so, activate back arrow
+//        if (state.storyindex == 1 & previousstoryindex == 0) {
+//            console.log('ping!')
+//            $('#backarrow.arrow_deactivated').addClass('arrow')
+//            $('#backarrow.arrow_deactivated').removeClass('arrow_deactivated')
+//        } else if (state.storyindex == storyguide.length - 1){
+//            //Also check for end of story: make forward arrow grey if so.
+//            $('#forwardarrow.arrow').addClass('arrow_deactivated')
+//            $('#forwardarrow.arrow_deactivated').removeClass('arrow')
+
+
+
 
     }
 
@@ -245,6 +296,19 @@ $('#backarrow').click(function () {
     if (state.storyindex - 1 >= 0) {
 
         story(--state.storyindex)
+
+        //Check if we moved from last to penultimate
+        //If so, re-activate forward arrow
+//        if (state.storyindex == 1 & previousstoryindex == 0) {
+//            console.log('ping!')
+//            $('#backarrow.arrow_deactivated').addClass('arrow')
+//            $('#backarrow.arrow_deactivated').removeClass('arrow_deactivated')
+//        } else if (state.storyindex == storyguide.length - 1){
+//            //Also check for end of story: make forward arrow grey if so.
+//            $('#forwardarrow.arrow').addClass('arrow_deactivated')
+//            $('#forwardarrow.arrow_deactivated').removeClass('arrow')
+
+
 
     }
 
@@ -285,9 +349,6 @@ function setEnglandMapColourScale() {
 
     if (state.difftoggle === "diff") {
 
-        console.log(Math.min.apply(null, result))
-        console.log(Math.max.apply(null, result))
-
         //diff variables are diverging scales with zero at centre
         //https://stackoverflow.com/questions/36608611/why-does-math-min1-2-return-nan
         //Well that's odd! A min finding function that doesn't take an array??
@@ -301,7 +362,6 @@ function setEnglandMapColourScale() {
 
 
     //Recreate colours on legend scale   
-//    legendscale = d3.scaleLinear().domain([Math.min.apply(null, result), Math.max.apply(null, result)]).range([0,180])
     legendscale = d3.scaleLinear().domain([0, 180]).range([Math.min.apply(null, result), Math.max.apply(null, result)])
 
     drawLegend()
@@ -350,6 +410,10 @@ function drawLegend() {
         lines[i] += 1
     }
 
+    //drop all prev lines first
+    d3.select(".legendcontainer")
+            .selectAll("line")
+            .remove()
 
     var linez = d3.select(".legendcontainer")
             .selectAll("line")
@@ -374,13 +438,29 @@ function drawLegend() {
             .attr("stroke", function (d) {
 
                 //Get colour interpolator based on joined string. Then pass in correct property based on another joined string
-//                    return mapcolours[topbottom + state.decile_or_rank](d.properties[state.decile_or_rank + state.year])
-//                    return("rgb(255,0,0)")
-
                 return hexmapcolourscale(legendscale(d))
 
 
             })
+
+
+    //If diff legend, add zero line
+    if (state.difftoggle === "diff") {
+
+        //Niiiice
+        //https://stackoverflow.com/questions/26172311/invert-scale-function
+
+        d3.select(".legendcontainer")
+                .append("line")
+                .attrs({
+                    y1: 1,
+                    x1: legendscale.invert(0),
+                    y2: 20,
+                    x2: legendscale.invert(0)
+                })
+                .attr("stroke-width", 1)
+                .attr("stroke", "rgb(0,0,0)")
+    }
 
 
 }
@@ -506,6 +586,7 @@ function updateOverlayMap() {
                 return (d.properties.g)
             })
 
+
     overlaymap.enter().append("path")
             .attr("id", function (d, i) {
                 return("overlay_index" + i)
@@ -513,6 +594,16 @@ function updateOverlayMap() {
             .attr("d", overlaypath)
             .attr("class", "overlay_path")
             .merge(overlaymap)
+            .on("mouseover", function (d) {
+                $("#legendhider").removeClass('visible')
+                $("#legendhider").addClass('invisible')
+
+            })
+            .on("mouseout", function (d) {
+                $("#legendhider").removeClass('invisible')
+                $("#legendhider").addClass('visible')
+
+            })
 
 
 }
@@ -710,7 +801,8 @@ function updateSidebar(geofeatures, topbottom) {
             selection = "g#bottomsidebar_for_percenttext"
         }
 
-        classpath = "sidebartext"
+//        classpath = "sidebartext"
+        classpath = "sidebartext svgtxt"
 
 
         var textz = d3.select(selection)
@@ -883,14 +975,10 @@ function loadMapData(laname, topbottom) {
         //Set state for bottom and top geofeatures and paths so they can be used when year changes
         if (topbottom === "top") {
 
-            console.log("top")
-
             state.topgeofeatures = geofeatures
             state.toppath = path
 
         } else {
-
-            console.log("bottom")
 
             state.bottomgeofeatures = geofeatures
             state.bottompath = path
@@ -914,7 +1002,7 @@ function load() {
     console.log("loading")
 
 
-//    loadTopMapData(state.topmapselection)
+
     loadMapData(state.topmapselection, "top")
     loadMapData(state.bottommapselection, "bottom")
 
@@ -1060,7 +1148,24 @@ function load() {
 
 function story(index) {
 
-    console.log("story " + index)
+//    console.log("story " + index)
+
+    //update arrows to mark start and end of story
+    //grey out back or forward if none in those directions
+    if (index == 0) {
+        $("#backarrow").removeClass();
+        $("#backarrow").addClass('arrow_deactivated');
+    } else if (index == storyguide.length - 1) {
+        $("#forwardarrow").removeClass();
+        $("#forwardarrow").addClass('arrow_deactivated');
+    } else {
+        //otherwise is visible
+        $("#forwardarrow").removeClass();
+        $("#backarrow").removeClass();
+        $("#forwardarrow").addClass('arrow')
+        $("#backarrow").addClass('arrow')
+
+    }
 
     //replace text
     //$(".storytext").text(storyguide[index].storytext);
@@ -1072,6 +1177,31 @@ function story(index) {
 
         state.year = storyguide[index].year
         yearChanged()
+
+    }
+
+    //This needs to be first, before maps load. Updating them twice, though?
+    //Optimise updates later...
+    if (storyguide[index].decile_or_rank !== state.decile_or_rank) {
+
+        state.decile_or_rank = storyguide[index].decile_or_rank
+
+        d3.selectAll(".topsidebarline").remove()
+        d3.selectAll(".bottomsidebarline").remove()
+        d3.selectAll(".sidebartext").remove()
+
+        updateAllMapsAndSidebars()
+        
+//        d3.selectAll(".topsidebarline")
+//                .remove()
+//        d3.selectAll(".bottomsidebarline")
+//                .remove()
+//        d3.selectAll(".topmap_path")
+//                .remove()
+//        d3.selectAll(".bottommap_path")
+//                .remove()
+//
+//        d3.selectAll(".sidebartext").remove()
 
     }
 
@@ -1148,6 +1278,7 @@ function story(index) {
         updateEnglandMap()
 
     }
+
 
 
 

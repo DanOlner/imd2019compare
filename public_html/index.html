@@ -5,6 +5,7 @@
         <title>IMD comparator</title>
         <script type="text/javascript" src="js/d3.js"></script>
         <script type="text/javascript" src="js/d3-scale-chromatic.js"></script>
+        <script type="text/javascript" src="js/d3-scale.v3.min.js"></script>
         <script type="text/javascript" src="js/d3-selection-multi.js"></script>
         <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/jquery-ui.js"></script>
@@ -31,9 +32,10 @@
 
                 <!--Text box for explanations / story-->
                 <div class ="story">
-                    <p class = "storytext"><b>Welcome to the England Index of Multiple Deprivation viewer thingyo.</b> 
-                        Click on the forward button below to learn how to use it and see some interesting data stories.
-                        The <em>examples</em> menu below has all of these items.
+                    <p class = "storytext"><b>Welcome to <em>A Tale of Two Countries</em>, 
+                                a tool for examining the English Index of Multiple Deprivation.</b> 
+                        Click on the forward arrow below to learn how to use it and see some of the most striking stories the data tells.
+                        Use the <em>examples</em> menu below to jump to any story.
                     </p>
                 </div>
 
@@ -62,10 +64,13 @@
 
 
                 <svg class="map" width="1800px" height="1100px">
+                
+                <!--top/bottom map marker (y pos changed in code)-->
+                <circle class="topbottommarker" id="marker_top" cx="585" cy="392" r="5"/>
 
                 <!--Add buttons for story/examples-->
                 <g transform = "translate(300,800)">
-                <polygon class="arrow" id="backarrow" points="36,0 36,36 0,18" style="stroke:black;stroke-width:2;" />
+                <polygon class="arrow_deactivated" id="backarrow" points="36,0 36,36 0,18" style="stroke:black;stroke-width:2;" />
                 </g>
                 <g transform = "translate(350,800)">
                 <polygon class="arrow" id="forwardarrow" points="0,0 0,36 36,18" style="stroke:black;stroke-width:2;" />
@@ -140,8 +145,8 @@
                 <g class ="legendcontainer">
                 <rect id = "legend" width = "182" height = "22"></rect>      
                 </g>
-                <text x ="6" y="16" font-size="15px" fill="white" fill-opacity="0.7" text-anchor="left">min</text>                
-                <text x ="148" y="16" font-size="15px" fill="white" fill-opacity="0.7" text-anchor="left">max</text>                
+                <text class="svgtxt" x ="6" y="16" font-size="15px" fill="white" fill-opacity="0.7" text-anchor="left">min</text>                
+                <text class="svgtxt" x ="148" y="16" font-size="15px" fill="white" fill-opacity="0.7" text-anchor="left">max</text>                
                 </g>
 
 
