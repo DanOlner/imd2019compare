@@ -1,15 +1,20 @@
 body {
+
+    /*https://stackoverflow.com/a/17408949/5023561*/
     background-color: rgb(100,100,100);
+       transform: scale(0.8);
+       transform-origin: 50% 0%;
+
 }
 
 #headerimg {
-    
+
     position:absolute;
     height: 40px;
     top: -11px;
     right: -15px;
     opacity: 0.5;
-    
+
 }
 
 
@@ -19,7 +24,7 @@ div.wholepage {
     margin: auto;
     /*background: white;*/
     background-color: rgb(150,150,150);
-    padding: 25px;
+    padding: 25px;    
 }
 
 
@@ -42,21 +47,21 @@ div.credits {
 /*stop svg text from being selectable
 https://jsfiddle.net/adeneo/72LvL8n6/*/
 .svgtxt{
-  -webkit-touch-callout: none;
-  -webkit-user-select:none;
-  -khtml-user-select:none;
-  -moz-user-select:none;
-  -ms-user-select:none;
-  -o-user-select:none;
-  user-select:none;
+    -webkit-touch-callout: none;
+    -webkit-user-select:none;
+    -khtml-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    -o-user-select:none;
+    user-select:none;
 }
 
 
 /*menu hover*/
 /*http://jsfiddle.net/sW7Dh/4/*/
 .dropdown-item {
-		background-color: white;
-		color: black;
+    background-color: white;
+    color: black;
 }
 
 .dropdown-item:hover {
@@ -187,11 +192,11 @@ button#difftoggle{
 
 
 .visible {
-  visibility: visible;
+    visibility: visible;
 }
 
 .invisible {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 
@@ -244,7 +249,7 @@ rect#legend {
 
 
 .sidebartext {
-	/*mix-blend-mode: difference;*/
+    /*mix-blend-mode: difference;*/
 }
 
 .graphpath {
