@@ -13,9 +13,10 @@ var storyguide = [
     {
         menutext: "Instructions start",
         storytext: "You can <b>compare two local authorities side by side.</b> \n\
-Here, the maps of Sheffield and Manchester show LSOAs (the zones used by the IMD) coloured by deprivation index. \n\
+Here, the maps of Sheffield and Manchester show <a href=\"https://data.gov.uk/dataset/c481f2d3-91fc-4767-ae10-2efdf6d58996/lower-layer-super-output-areas-lsoas\">LSOAs</a>\n\
+        (the zones used by the IMD) coloured by deprivation index. \n\
 The bars to the right match the map colours - showing exactly where each LSOA is in the IMD rank. \n\
-The bars capture the full index range for England: most deprived zones at the bottom, least deprived at the top. \n\
+The bars show the full range for England: most deprived zones at the bottom, least deprived at the top. \n\
 <b>Sheffield has an even spread, Manchester has far fewer 'least deprived' zones.</b>",
         year: 2019,
         decile_or_rank: "Rank",
@@ -28,8 +29,8 @@ The bars capture the full index range for England: most deprived zones at the bo
         menutext: "",
         storytext: "<b>Select a new local authority</b> either by <b>finding it on the England map</b> or <b>typing a part of its name</b> in the autocomplete box at the top. \n\
 To choose which map to change, use the <b>set bottom and top map</b> buttons.\n\
-Use the <b>rank/deciles</b> button to switch the bars between rank and decile view. \n\
-They're now on deciles: they show Sheffield has 19% of its zones in the top two (least deprived) deciles\n\
+Use the <b>rank/deciles</b> button to <b>switch the bars between rank and decile view</b>. \n\
+They're now on deciles: they show Sheffield has 10% of its zones in the top (least deprived) decile\n\
 while Manchester has none.",
         year: 2019,
         decile_or_rank: "Decile",
@@ -40,10 +41,11 @@ while Manchester has none.",
     },
     {
         menutext: "Highest & lowest median IMD 2019",
-        storytext: "<b>The England map shows one of six variables you can select - mean through to highest.</b> Examples of each will follow. \n\
+        storytext: "<b>The England map shows one of six variables you can select - 'mean' through to 'highest'.</b> Examples of each will follow. \n\
 Here, the England map shows <a href=\"https://en.wikipedia.org/wiki/Median\">median</a> IMD per local authority in 2019</b>. \n\
-High values in deeper red are clustered around the west of London.\n\
-Wokingham has the highest median, Liverpool the lowest.\n\
+Least deprived places in deeper red are clustered around the west of London.\n\
+More deprived are in the North and North-west, though also some are in North-east London. \n\
+Wokingham & Liverpool (shown here) have the highest & lowest median respectively.\n\
  ",
         year: 2019,
         decile_or_rank: "Rank",
@@ -52,6 +54,56 @@ Wokingham has the highest median, Liverpool the lowest.\n\
         hexmapvar: "median",
         difftoggle: ""
     },
+    
+    {
+        menutext: "% in bottom decile: if none, doesn't always mean less deprived",
+        storytext: "",
+        year: 2019,
+        decile_or_rank: "Decile",
+        topmapselection: "Middlesbrough",
+        bottommapselection: "Lambeth",
+        hexmapvar: "decile1prop",
+        difftoggle: ""
+    },
+    
+    
+    
+    {
+        menutext: "% in bottom decile: if none, doesn't always mean less deprived",
+        storytext: "",
+        year: 2019,
+        decile_or_rank: "Rank",
+        topmapselection: "Wokingham",
+        bottommapselection: "Liverpool",
+        hexmapvar: "median",
+        difftoggle: ""
+    },
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    {
+        menutext: "Two most like England as a whole",
+        storytext: "<b>Bury</b> and <b>Northumberland</b> have the distinction of being the most representative of England as a whole: \n\
+they hold first and second place for all of their deciles being closest to ten percent. Bury is first in 2015, second in 2019, Northumberland vice versa. \n\
+Though <b>click on 'rank/deciles'</b>: Bury is a little more patchy in the spread of its LSOAs. \n\
+And if you <b>click on 'change year'</b>, you can see plenty of LSOAs changed deciles.",
+        year: 2019,
+        decile_or_rank: "Decile",
+        topmapselection: "Northumberland",
+        bottommapselection: "Bury",
+        hexmapvar: "median",
+        difftoggle: ""
+    },
+    
+    
+    
     
     {
         menutext: "pos/neg",

@@ -11,7 +11,8 @@ var state = {
     bottomgeofeatures: null,
     topgeofeatures: null,
     bottompath: null,
-    toppath: null//These four above copied in the first topbottom check in loadMapData so year change can update correctly
+    toppath: null, //These four above copied in the first topbottom check in loadMapData so year change can update correctly
+    legendtext_numbers: false
 }
 
 var lookat = null
@@ -78,7 +79,18 @@ var sideBarVerticalScale_DecilePercent = d3.scaleLinear().domain([0, 100]).range
 
 
 
-
+//Bind mouseover and out to legend container
+//$( "#legend" ).mouseout(function() {
+//  state.legendtext_numbers = false
+//})
+//
+////$( ".legendcontainer" ).mouseleave(function() {
+////  state.legendtext_numbers = true
+////})
+//
+//$( "#legend" ).mouseover(function() {
+//  state.legendtext_numbers = true
+//})
 
 
 
@@ -220,6 +232,11 @@ $("#decilerank").click(function () {
 
 for (var i = 0; i < storyguide.length; i++) {
 
+    //before pulling out each item (and missing some)
+    //add index here so it matches menu to story item correctly
+    //(Just using storyguide_menusub array index won't match)
+    storyguide[i].index = i
+
     if (storyguide[i].menutext !== "") {
         storyguide_menusub.push(storyguide[i])
     }
@@ -236,7 +253,7 @@ menuitems.selectAll('li')
         .attr('class', 'dropdown-item')
         .attr('href', '#')
         .attr('index', function (d, i) {
-            return i
+            return d.index//set above, see... 
         })
         .text(function (d, i) {
             return d.menutext
@@ -444,6 +461,9 @@ function drawLegend() {
             })
 
 
+
+
+
     //If diff legend, add zero line
     if (state.difftoggle === "diff") {
 
@@ -461,6 +481,29 @@ function drawLegend() {
                 .attr("stroke-width", 1)
                 .attr("stroke", "rgb(0,0,0)")
     }
+
+
+    //Add transparent rectangle over the top for hover behaviour
+    d3.select("#hovermask")
+            .append("rect")
+            .attr("width", 182)
+            .attr("height", 22)
+            .attr("fill-opacity", 0)
+            .on("mouseover", function (d) {
+
+                //One decimal place
+                $('#legendmin').text(Math.round(legendscale(0) * 10) / 10);
+                $('#legendmax').text(Math.round(legendscale(180) * 10) / 10);
+
+            })
+            .on("mouseout", function (d) {
+
+                $('#legendmin').text('min');
+                $('#legendmax').text('max');
+
+            }
+            )
+
 
 
 }
@@ -495,7 +538,7 @@ function updateEnglandMap() {
                     }
                 }//else if next is after if(state.hoveredover...
 
-                //set permanent top bottom marker colour
+//set permanent top bottom marker colour
                 else if (d.properties.n === state.bottommapselection) {
                     return("rgb(0,255,0)")
                 } else if (d.properties.n === state.topmapselection) {
@@ -631,7 +674,7 @@ function updateLocalAuthorityMap(geofeatures, path, topbottom) {
     var lamap = d3.select(selection)
             .selectAll("path")
             .data(geofeatures.features, function (d) {
-                return (d.properties.code)
+                return(d.properties.code)
             })
 
     lamap.enter().append("path")
@@ -682,15 +725,15 @@ function updateSidebar(geofeatures, topbottom) {
 
 //        lookat = geofeatures
 
-        //Get count of unique values
-        //https://stackoverflow.com/a/49156466/5023561
+//Get count of unique values
+//https://stackoverflow.com/a/49156466/5023561
         var uniqs = result.reduce((acc, val) => {
             acc[val] = acc[val] === undefined ? 1 : acc[val] += 1;
             return acc;
         }, {});
 //        console.log(uniqs)
 
-        //then find as proportion of whole. We have number of LSOAs from geofeatures
+//then find as proportion of whole. We have number of LSOAs from geofeatures
         for (var property in uniqs) {
             if (uniqs.hasOwnProperty(property)) {
                 uniqs[property] /= geofeatures.features.length
@@ -699,14 +742,14 @@ function updateSidebar(geofeatures, topbottom) {
         }
 
 
-        //Pull out into array. Need to iterate over - if missing, had no counts
-        //So need to set to zero.
+//Pull out into array. Need to iterate over - if missing, had no counts
+//So need to set to zero.
         var decileprops = new Array(10)
 
-        //Confusing so take note: the array is normal indexing 0-9.
-        //The *object* contains a key for the decile number 1-10. So when using below
-        //ADD ONE TO GET DECILE
-        //(And subtract here to get correct array assignment)
+//Confusing so take note: the array is normal indexing 0-9.
+//The *object* contains a key for the decile number 1-10. So when using below
+//ADD ONE TO GET DECILE
+//(And subtract here to get correct array assignment)
         for (var i = 1; i < 11; i++) {
 
             if (typeof uniqs[i] === "undefined") {
@@ -720,7 +763,7 @@ function updateSidebar(geofeatures, topbottom) {
 
 
 
-        //SET UP DECILE VIZ IN BARS
+//SET UP DECILE VIZ IN BARS
         var selection = null
         var classpath = null
 
@@ -756,8 +799,8 @@ function updateSidebar(geofeatures, topbottom) {
                 .duration(750)
 
 
-                //The x attribute defines the left position of the rectangle
-                //The y attribute defines the top position of the rectangle
+//The x attribute defines the left position of the rectangle
+//The y attribute defines the top position of the rectangle
                 .attrs({
                     "x": 1,
                     "y": function (d, i) {
@@ -794,7 +837,7 @@ function updateSidebar(geofeatures, topbottom) {
 
 
 
-        //ADD TEXT OF PERCENTAGES
+//ADD TEXT OF PERCENTAGES
         if (topbottom == "top") {
             selection = "g#topsidebar_for_percenttext"
         } else {
@@ -819,7 +862,7 @@ function updateSidebar(geofeatures, topbottom) {
 
                 .merge(textz)
                 .text(function (d) {
-                    return (Math.round(d) + "%")
+                    return(Math.round(d) + "%")
                 })
                 .attr("stroke", 255)
                 .attr("fill", "rgb(100,100,100)")
@@ -1051,8 +1094,8 @@ function load() {
             return acc.concat(a.properties)
         }, []).map(a => a.n);
 
-        //https://jqueryui.com/autocomplete/
-        //https://stackoverflow.com/questions/19675069/how-to-get-value-of-selected-item-in-autocomplete
+//https://jqueryui.com/autocomplete/
+//https://stackoverflow.com/questions/19675069/how-to-get-value-of-selected-item-in-autocomplete
         $(function () {
             $("#tags").autocomplete({
                 source: result,
@@ -1088,7 +1131,7 @@ function load() {
 
                     loadMapData(ui.item.label, state.setwhichmap)
 
-                    //Also need to rerun hexmap to change marker of where LA is
+//Also need to rerun hexmap to change marker of where LA is
                     updateEnglandMap()
 
                 }
@@ -1097,7 +1140,7 @@ function load() {
 
 
 
-        //Set up region hex overlay here so it draws in the right order
+//Set up region hex overlay here so it draws in the right order
         d3.json("data/hexmap_regions.geojson").then(function (data) {
 
             overlaygeofeatures = data
@@ -1167,12 +1210,12 @@ function story(index) {
 
     }
 
-    //replace text
-    //$(".storytext").text(storyguide[index].storytext);
-    //Using replace version so we can have HTML in there.
+//replace text
+//$(".storytext").text(storyguide[index].storytext);
+//Using replace version so we can have HTML in there.
     $(".storytext").replaceWith("<p class = \"storytext\">" + storyguide[index].storytext + "</p>");
 
-    //Interpret commands
+//Interpret commands
     if (storyguide[index].year != state.year) {
 
         state.year = storyguide[index].year
@@ -1180,8 +1223,8 @@ function story(index) {
 
     }
 
-    //This needs to be first, before maps load. Updating them twice, though?
-    //Optimise updates later...
+//This needs to be first, before maps load. Updating them twice, though?
+//Optimise updates later...
     if (storyguide[index].decile_or_rank !== state.decile_or_rank) {
 
         state.decile_or_rank = storyguide[index].decile_or_rank
@@ -1191,7 +1234,7 @@ function story(index) {
         d3.selectAll(".sidebartext").remove()
 
         updateAllMapsAndSidebars()
-        
+
 //        d3.selectAll(".topsidebarline")
 //                .remove()
 //        d3.selectAll(".bottomsidebarline")
