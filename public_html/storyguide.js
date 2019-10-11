@@ -93,7 +93,7 @@ Also select 'rank' and then change year: note the opposite movement pattern.\n\
         menutext: "Change between 2015 & 2019: mean",
         storytext: "A map of the <b>difference in the mean between 2015 & 19</b> is striking. \n\
 Again, the North sees many places dropping - but other parts of the country also see falls, including the South-east. \n\
-In fact, the largest drop is there, in Tonbridge & Malling. London had strong gains, with Westminster being the largest mean increase in England. \n\
+In fact, the largest drop is there, in Tonbridge & Malling. London has strong gains, with Westminster being the largest mean increase in England. \n\
 Click <b>'change year'</b> to see how zones in those two moved in opposite directions between 2015 and 19.",
         year: 2019,
         decile_or_rank: "Rank",
@@ -119,10 +119,11 @@ Many places in the darkest grey have no zones at all in the least deprived decil
     
     //Also, change to <b>diff 15-19</b>: some places where the top decile proportion dropped the most are in the same areas west of London.\n\
    {
-        menutext: "Places with highest 'lowest' (consistently less deprived places)",
+        menutext: "Places with highest 'lowest' (consistently less-deprived places)",
         storytext: "<b>'Lowest'</b> colours the map based on the <b>lowest-ranked zone in each local authority</b>.\n\
-In the maps shown here, Hart (bottom map) has the 'highest lowest' (discounting Isles of Scilly - just one zone). \n\
-It is consistently less deprived across the whole local authority. \n\
+A cluster of local authorities west of London have very high 'lowest' LSOAs. \n\
+These are more consistently less deprived across the whole local authority. \n\
+Hart (bottom map) has the 'highest lowest' (discounting Isles of Scilly - just one zone). \n\
 In contrast, Barking & Dagenham has the 'lowest highest': it is consistently one of the most deprived.",
         year: 2019,
         decile_or_rank: "Rank",
@@ -134,10 +135,10 @@ In contrast, Barking & Dagenham has the 'lowest highest': it is consistently one
         
     
     {
-        menutext: "Places with lowest 'highest' (consistently more deprived places)",
+        menutext: "Places with lowest 'highest' (consistently more-deprived places)",
         storytext: "<b>'Highest'</b> colours the map based on the <b>highest-ranked zone in each local authority.</b> \n\
-The map has many red places because most local authorities have some less deprived zones. \n\
-Whites and greys have fewer less deprived zones. The two London local authorities shown here - Barking/Dagenham & Hackney - \n\
+The map has many red places because most local authorities have some less-deprived zones. \n\
+Whites and greys have fewer less-deprived zones. The two London local authorities shown here - Barking/Dagenham & Hackney - \n\
 have the 'lowest highest' in both 2015 & 19: they are consistently more deprived across their whole geography.",
         year: 2019,
         decile_or_rank: "Rank",
@@ -145,6 +146,19 @@ have the 'lowest highest' in both 2015 & 19: they are consistently more deprived
         bottommapselection: "Hackney",
         hexmapvar: "highest",
         difftoggle: ""
+    },
+    
+    {
+        menutext: "'Highest' change between 2015-19",
+        storytext: "The two local authorities where their <b>'Highest'</b> LSOA changes position the most are \n\
+<b>Slough</b> (its highest drops 3161 ranks) and <b>Westminster</b> (its highest rockets up by 5396 ranks). 2015 data is shown here: \n\
+click the <b>change year</b> button to see the shift in 2019. Note how much more blue the Westminster map gains, as well as the jump in LSOA position on its bar.",
+        year: 2015,
+        decile_or_rank: "Rank",
+        topmapselection: "Westminster",
+        bottommapselection: "Slough",
+        hexmapvar: "highest",
+        difftoggle: "diff"
     },
     
     
