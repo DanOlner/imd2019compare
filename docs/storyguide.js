@@ -44,7 +44,7 @@ while Manchester has none.",
         storytext: "<b>The England map shows one of six variables you can select - 'mean' through to 'highest'.</b> Examples of each will follow. \n\
 Here, the England map shows <a href=\"https://en.wikipedia.org/wiki/Median\">median</a> IMD per local authority in 2019</b>. \n\
 Least deprived places in deeper red are clustered around the west of London.\n\
-More deprived are in the North and North-west, though also some are in North-east London. \n\
+More deprived are in the North and North-west, though London has a share. \n\
 Wokingham & Liverpool (shown here) have the highest & lowest median respectively.\n\
  ",
         year: 2019,
@@ -91,7 +91,7 @@ Also select 'rank' and then change year: note the opposite movement pattern.\n\
 //Hover over the colour guide to see the lowest and highest values: -22.2% and 7.8%. \n\
     {
         menutext: "Change between 2015 & 2019: mean",
-        storytext: "A map of the <b>difference in the mean between 2015 & 19</b> is striking. \n\
+        storytext: "A map of the <b>difference in mean IMD between 2015 & 19</b> is striking. \n\
 Again, the North sees many places dropping - but other parts of the country also see falls, including the South-east. \n\
 In fact, the largest drop is there, in Tonbridge & Malling. London has strong gains, with Westminster being the largest mean increase in England. \n\
 Click <b>'change year'</b> to see how zones in those two moved in opposite directions between 2015 and 19.",
@@ -120,15 +120,15 @@ Many places in the darkest grey have no zones at all in the least deprived decil
     //Also, change to <b>diff 15-19</b>: some places where the top decile proportion dropped the most are in the same areas west of London.\n\
    {
         menutext: "Places with highest 'lowest' (consistently less-deprived places)",
-        storytext: "<b>'Lowest'</b> colours the map based on the <b>lowest-ranked zone in each local authority</b>.\n\
+        storytext: "<b>'Lowest'</b> shades the map based on the <b>lowest-ranked zone in each local authority</b>.\n\
 A cluster of local authorities west of London have very high 'lowest' LSOAs. \n\
 These are more consistently less deprived across the whole local authority. \n\
-Hart (bottom map) has the 'highest lowest' (discounting Isles of Scilly - just one zone). \n\
+Hart (top map) has the 'highest lowest' (discounting Isles of Scilly - just one zone). \n\
 In contrast, Barking & Dagenham has the 'lowest highest': it is consistently one of the most deprived.",
-        year: 2019,
+        year: 2019, 
         decile_or_rank: "Rank",
-        topmapselection: "Barking and Dagenham",
-        bottommapselection: "Hart",
+        topmapselection: "Hart",
+        bottommapselection: "Barking and Dagenham",
         hexmapvar: "lowest",
         difftoggle: ""
     },
@@ -136,7 +136,7 @@ In contrast, Barking & Dagenham has the 'lowest highest': it is consistently one
     
     {
         menutext: "Places with lowest 'highest' (consistently more-deprived places)",
-        storytext: "<b>'Highest'</b> colours the map based on the <b>highest-ranked zone in each local authority.</b> \n\
+        storytext: "<b>'Highest'</b> shades the map based on the <b>highest-ranked zone in each local authority.</b> \n\
 The map has many red places because most local authorities have some less-deprived zones. \n\
 Whites and greys have fewer less-deprived zones. The two London local authorities shown here - Barking/Dagenham & Hackney - \n\
 have the 'lowest highest' in both 2015 & 19: they are consistently more deprived across their whole geography.",

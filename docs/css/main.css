@@ -2,6 +2,16 @@ body {
     background-color: rgb(100,100,100);
 }
 
+#headerimg {
+    
+    position:absolute;
+    height: 40px;
+    top: -11px;
+    right: -15px;
+    opacity: 0.5;
+    
+}
+
 
 /*centre whole page*/
 div.wholepage {
@@ -21,6 +31,12 @@ div.story {
     /*background-color: rgb(130,130,130);*/
     width: 570px;
 
+}
+
+div.credits {
+    text-align: justify; 
+    text-align-last: center;
+    opacity: 0.5;
 }
 
 /*stop svg text from being selectable
