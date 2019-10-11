@@ -212,7 +212,42 @@ $("#decilerank").click(function () {
 //    }
 //});
 
-
+//Change map select on ctrl press
+//Have to faff with class changes, let's leave for now
+//$(document).keydown(function (e) {
+//    if (e.keyCode == 17) {
+////        console.log("ctrl")
+//
+//
+//        if (state.setwhichmap == "top") {
+//            
+//            state.setwhichmap = "bottom"
+//            //adds to class def in html...
+//            //https://stackoverflow.com/questions/16240892/jquery-change-button-color-onclick
+//            $(".button").removeClass('buttonselectedtop')
+//            $(".button").removeClass('buttonselectedbottom')
+//
+//            //change map text marker
+//            $('#marker_bottom').attr('cy', '392');
+//            $('#marker_bottom').attr('id', 'marker_top');
+//
+//
+//            $(this).addClass('buttonselectedtop');
+//        } else {
+//            state.setwhichmap = "top"
+//            
+//            $(".button").removeClass('buttonselectedtop')
+//            $(".button").removeClass('buttonselectedbottom')
+//            $(this).addClass('buttonselectedbottom');
+//
+//            $('#marker_top').attr('cy', '792');
+//            $('#marker_top').attr('id', 'marker_bottom');
+//
+//        }
+//
+//
+//    }
+//});
 
 
 //Load menu items in before attaching click

@@ -57,7 +57,11 @@ Wokingham & Liverpool (shown here) have the highest & lowest median respectively
     
     {
         menutext: "% in bottom decile: if none, doesn't always mean less deprived",
-        storytext: "",
+        storytext: "This England map shows the <b>percent of zones in the most deprived decile</b> for each local authority. \n\
+The darkest grey ones have <b>no zones in that decile</b>. There's a clear North-South pattern. \n\
+In both 2015 and 2019, <b>Middlesbrough has the highest % of zones in the most deprived decile.</b> \n\
+A local authority may still be quite deprived with no zones in the lowest decile. \n\
+For example, Lambeth (shown here) has the lowest median IMD while having no 'lowest' zones.",
         year: 2019,
         decile_or_rank: "Decile",
         topmapselection: "Middlesbrough",
@@ -66,26 +70,82 @@ Wokingham & Liverpool (shown here) have the highest & lowest median respectively
         difftoggle: ""
     },
     
+    {
+        menutext: "Change between 2015 & 2019: % bottom decile",
+        storytext: "The <b>'diff 15-19'</b> button lets the 6 variables show <b>change between 2015 and 19.</b> \n\
+This map shows how the <b>% of zones in the most deprived decile changed.</b>\n\
+Again, there is a pattern: places along the NW have seen more zones fall into the lowest decile. \n\
+London has many places where zones moved out of it. \n\
+<b>Click on 'change year'</b> to see change in Tower Hamlets (-22%) & Oldham (+8%). \n\
+Also select 'rank' and then change year: note the opposite movement pattern.\n\
+",
+        year: 2019,
+        decile_or_rank: "Decile",
+        topmapselection: "Oldham",
+        bottommapselection: "Tower Hamlets",
+        hexmapvar: "decile1prop",
+        difftoggle: "diff"
+    },
     
+//    The map colour guide gains a black line showing zero: below this, change was negative between those years. \n\
+//Hover over the colour guide to see the lowest and highest values: -22.2% and 7.8%. \n\
+    {
+        menutext: "Change between 2015 & 2019: mean",
+        storytext: "A map of the <b>difference in the mean between 2015 & 19</b> is striking. \n\
+Again, the North sees many places dropping - but other parts of the country also see falls, including the South-east. \n\
+In fact, the largest drop is there, in Tonbridge & Malling. London had strong gains, with Westminster being the largest mean increase in England. \n\
+Click <b>'change year'</b> to see how zones in those two moved in opposite directions between 2015 and 19.",
+        year: 2019,
+        decile_or_rank: "Rank",
+        topmapselection: "Tonbridge and Malling",
+        bottommapselection: "Westminster",
+        hexmapvar: "mean",
+        difftoggle: "diff"
+    },
     
     {
-        menutext: "% in bottom decile: if none, doesn't always mean less deprived",
-        storytext: "",
+        menutext: "% top decile",
+        storytext: "Places with a high <b>proportion of zones in the least-deprived decile</b> tend to be clustered around the outskirts of London. \n\
+Wokingham and Hart, shown here, hold the top two places for both 2015 and 19. \n\
+Click <b>rank/decile</b>: this shows more than two thirds of their LSOAs are in the top decile.\n\
+Many places in the darkest grey have no zones at all in the least deprived decile. London & the east coast stand out.",
         year: 2019,
         decile_or_rank: "Rank",
         topmapselection: "Wokingham",
-        bottommapselection: "Liverpool",
-        hexmapvar: "median",
+        bottommapselection: "Hart",
+        hexmapvar: "decile10prop",
         difftoggle: ""
     },
     
+    //Also, change to <b>diff 15-19</b>: some places where the top decile proportion dropped the most are in the same areas west of London.\n\
+   {
+        menutext: "Places with highest 'lowest' (consistently less deprived places)",
+        storytext: "<b>'Lowest'</b> colours the map based on the <b>lowest-ranked zone in each local authority</b>.\n\
+In the maps shown here, Hart (bottom map) has the 'highest lowest' (discounting Isles of Scilly - just one zone). \n\
+It is consistently less deprived across the whole local authority. \n\
+In contrast, Barking & Dagenham has the 'lowest highest': it is consistently one of the most deprived.",
+        year: 2019,
+        decile_or_rank: "Rank",
+        topmapselection: "Barking and Dagenham",
+        bottommapselection: "Hart",
+        hexmapvar: "lowest",
+        difftoggle: ""
+    },
+        
     
-    
-    
-    
-    
-    
-    
+    {
+        menutext: "Places with lowest 'highest' (consistently more deprived places)",
+        storytext: "<b>'Highest'</b> colours the map based on the <b>highest-ranked zone in each local authority.</b> \n\
+The map has many red places because most local authorities have some less deprived zones. \n\
+Whites and greys have fewer less deprived zones. The two London local authorities shown here - Barking/Dagenham & Hackney - \n\
+have the 'lowest highest' in both 2015 & 19: they are consistently more deprived across their whole geography.",
+        year: 2019,
+        decile_or_rank: "Rank",
+        topmapselection: "Barking and Dagenham",
+        bottommapselection: "Hackney",
+        hexmapvar: "highest",
+        difftoggle: ""
+    },
     
     
     {
@@ -103,61 +163,57 @@ And if you <b>click on 'change year'</b>, you can see plenty of LSOAs changed de
     },
     
     
+    {
+        menutext: "Mean vs median",
+        storytext: "What's the difference between the mean & median? <a href=\"https://blog.datawrapper.de/weekly-chart-income\">This site</a> explains it well, \n\
+and these two example local authorities illustrate that in the IMD data. \n\
+They have the biggest difference between mean & median - Middlesbrough's mean is higher than its median, Three Rivers vice versa. \n\
+The mean is strongly affected by extreme values. In Middlesbrough's case, while 49% of its LSOAs are in the lowest decile,\n\
+there are many zones in the other deciles pulling the mean up.",
+        year: 2019,
+        decile_or_rank: "Decile",
+        topmapselection: "Three Rivers",
+        bottommapselection: "Middlesbrough",
+        hexmapvar: "median",
+        difftoggle: ""
+    },
     
     
-    {
-        menutext: "pos/neg",
-        storytext: "The England map can show 4 different values: mean, median, highest and lowest. 'Highest' (shown here) means 'the zone with the highest IMD rank in that LA' and 'lowest'\n\
-vice versa. These two maps show the two LAs where the highest zone changed the most between 2015-19. <b>Click on 'change year' to see.</b>\n\
-Note those two white zones on the England map in NE London. Click on one of them...",
-        year: 2019,
-        topmapselection: "Westminster",
-        bottommapselection: "Slough",
-        hexmapvar: "highest",
-        difftoggle: ""
-    },
-    {
-        menutext: "LAs with lowest 'highest' (shows consistently more deprived places)",
-        storytext: "Hopefully you clicked on Barking/Dagenham or Hackney. Here we can see, their highest-ranked LSOAs are near the middle of the rankings. \n\
-In fact, Barking/Dagenham has the 'lowest highest' in 2019, Hackney the same for 2015. In contrast, most places (especially the deep red ones on the England map) have at least some LSOAs\n\
-near the top of the least-deprived end of the rank.",
-        year: 2019,
-        topmapselection: "Barking and Dagenham",
-        bottommapselection: "Hackney",
-        hexmapvar: "highest",
-        difftoggle: ""
-    },
-    {
-        menutext: "LAs with highest 'lowest' (shows consistently less-deprived places)",
-        storytext: "'Highest' is effective for seeing where is overall more deprived: places where all LSOAs are in the more-deprived ranks. \n\
-'Lowest' shows the reverse: for example, Hart (bottom map) has the 'highest lowest' (discounting Isles of Scilly - just one zone). \n\
-It is consistently less-deprived across the whole local authority.",
-        year: 2019,
-        topmapselection: "Barking and Dagenham",
-        bottommapselection: "Hart",
-        hexmapvar: "lowest",
-        difftoggle: ""
-    },
-    {
-        menutext: "Highest example",
-        storytext: "<b>\"Highest\"</b> colours the map based on the highest-ranked zone in each local authority. \n\
-    Darker reds all have plenty in the least-deprived decile. As the colours become pinker, \n\
-    the \"highest\" becomes lower - many lighter ones have no zones in the least deprived decile, as shown here on opposite sides of the country.",
-        year: 2019,
-        topmapselection: "Fenland",
-        bottommapselection: "West Somerset",
-        hexmapvar: "highest",
-        difftoggle: ""
-    },
-    {
-        menutext: "Badgers2",
-        storytext: "Armpits and other things of that nature",
-        year: 2015,
-        topmapselection: "Nuneaton and Bedworth",
-        bottommapselection: "Wokingham",
-        hexmapvar: "mean",
-        difftoggle: "diff"
-    }
+    
+    
     
 ]
 
+
+
+
+
+
+//
+//    {
+//        menutext: "pos/neg",
+//        storytext: "The England map can show 4 different values: mean, median, highest and lowest. 'Highest' (shown here) means 'the zone with the highest IMD rank in that LA' and 'lowest'\n\
+//vice versa. These two maps show the two LAs where the highest zone changed the most between 2015-19. <b>Click on 'change year' to see.</b>\n\
+//Note those two white zones on the England map in NE London. Click on one of them...",
+//        year: 2019,
+//        topmapselection: "Westminster",
+//        bottommapselection: "Slough",
+//        hexmapvar: "highest",
+//        difftoggle: ""
+//    },
+    
+    //'Highest' is effective for seeing where is overall more deprived: places where all LSOAs are in the more-deprived ranks. \n\
+    
+//    {
+//        menutext: "Highest example",
+//        storytext: "<b>\"Highest\"</b> colours the map based on the highest-ranked zone in each local authority. \n\
+//    Darker reds all have plenty in the least-deprived decile. As the colours become pinker, \n\
+//    the \"highest\" becomes lower - many lighter ones have no zones in the least deprived decile, as shown here on opposite sides of the country.",
+//        year: 2019,
+//        decile_or_rank: "Decile",
+//        topmapselection: "Fenland",
+//        bottommapselection: "West Somerset",
+//        hexmapvar: "lowest",
+//        difftoggle: ""
+//    }
+//   
