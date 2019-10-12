@@ -20,7 +20,7 @@
             <div id ="interactions" style="position:relative;">
                 <button class="button buttonselectedtop" value="top">Set top map</button>
                 <button class="button" value="bottom">Set bottom map</button>
-                <label for="tags">Choose local authority from England map or start typing here then select: </label>
+                <label for="tags">Choose local authority from map or start typing here: </label>
                 <input id="tags">
                 <img id="headerimg" src ="header_reduced.png" />
 
@@ -67,7 +67,7 @@
                 <button class="absolute" id="difftoggle" value="diff">diff 15-19</button>
 
 
-                <svg class="map" width="1250px" height="900px">
+                <svg class="map" width="1250px" height="860px">
 
                 <!--top/bottom map marker (y pos changed in code)-->
                 <circle class="topbottommarker" id="marker_top" cx="585" cy="392" r="5"/>
@@ -172,7 +172,8 @@
 
                 </svg>
                 
-                <div class="credits">
+                <!--it's not SVG text but want to use the don't-highlight property in that class... doesn't work-->
+                <div class="credits svgtext">
                     By <a href="">Dan Olner</a>. IMD 2019 data <a href="https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019">here</a>, 
                     2015 data <a href="https://www.gov.uk/government/statistics/english-indices-of-deprivation-2015">here</a>. 
                     Amazing England hex map by <a href="https://twitter.com/olihawkins">Oli Hawkins</a>, available <a href="https://olihawkins.com/2018/02/1">here</a>. 

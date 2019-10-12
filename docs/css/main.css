@@ -1,9 +1,9 @@
 body {
 
-    /*https://stackoverflow.com/a/17408949/5023561*/
     background-color: rgb(100,100,100);
-       transform: scale(0.8);
-       transform-origin: 50% 0%;
+    /*https://stackoverflow.com/a/17408949/5023561*/
+/*    transform: scale(0.8);
+    transform-origin: 50% 0%;*/
 
 }
 

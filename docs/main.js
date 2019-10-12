@@ -454,13 +454,22 @@ function drawLegend() {
     //Set of lines across the legend, one per two pixels should do huh?
     //Is currently 180 wide...
     //https://stackoverflow.com/questions/3751520/how-to-generate-sequence-of-numbers-chars-in-javascript
-    lines = Array(90).fill().map((v, i) => i)
+//    lines = Array(90).fill().map((v, i) => i)
+//
+//    //Spaced two pixels apart
+//    for (var i = 0; i < lines.length; i++) {
+//        lines[i] *= 2
+//        lines[i] += 1
+//    }
+    
+    //Make per pixel to avoid odd scaling patterns
+    lines = Array(180).fill().map((v, i) => i)
 
     //Spaced two pixels apart
-    for (var i = 0; i < lines.length; i++) {
-        lines[i] *= 2
-        lines[i] += 1
-    }
+//    for (var i = 0; i < lines.length; i++) {
+//        lines[i] *= 2
+//        lines[i] += 1
+//    }
 
     //drop all prev lines first
     d3.select(".legendcontainer")
@@ -1076,10 +1085,10 @@ function loadMapData(laname, topbottom) {
 
 
 function load() {
-
+    
     console.log("loading")
-
-
+    
+    matchScreenScale()
 
     loadMapData(state.topmapselection, "top")
     loadMapData(state.bottommapselection, "bottom")
@@ -1365,15 +1374,29 @@ function story(index) {
 
 
 
+//SCREEN SCALE CHANGE
+$(window).resize(function() {
+  
+  matchScreenScale()
+  
+});
 
 
+//Might as well use D3 scale to get it set correctly
+//1.04 works in window.innerHeight(1007)
+//0.76 for 729 (without footer but that's fine at that scale)
+//Scalelinear can handily extrapolate beyond either end.
+var screenResizer = d3.scaleLinear().domain([729,1007]).range([0.76,1.04])
 
 
-
-
-
-
-
+function matchScreenScale(){
+    
+    $("body").css({
+        "transform": "scale(" + screenResizer(window.innerHeight) + ")", 
+        "transform-origin": "50% 0%"
+    })
+    
+}
 
 
 
