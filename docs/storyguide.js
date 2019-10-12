@@ -186,48 +186,26 @@ The mean is strongly affected by extreme values. In Middlesbrough's case, while 
 there are many zones in the other deciles pulling the mean up.",
         year: 2019,
         decile_or_rank: "Decile",
-        topmapselection: "Three Rivers",
-        bottommapselection: "Middlesbrough",
+        topmapselection: "Middlesbrough",
+        bottommapselection: "Three Rivers",
         hexmapvar: "median",
         difftoggle: ""
     },
     
     
-    
+    {
+        menutext: "",
+        storytext: "If you find any good data stories here, do let me know - either <a href=\"https://twitter.com/DanOlner\">on twitter</a> or email to dan olner at gmail dot com.",
+        year: 2019,
+        decile_or_rank: "Rank",
+        topmapselection: "Brighton and Hove",
+        bottommapselection: "York",
+        hexmapvar: "median",
+        difftoggle: ""
+    }
     
     
 ]
 
 
-
-
-
-
-//
-//    {
-//        menutext: "pos/neg",
-//        storytext: "The England map can show 4 different values: mean, median, highest and lowest. 'Highest' (shown here) means 'the zone with the highest IMD rank in that LA' and 'lowest'\n\
-//vice versa. These two maps show the two LAs where the highest zone changed the most between 2015-19. <b>Click on 'change year' to see.</b>\n\
-//Note those two white zones on the England map in NE London. Click on one of them...",
-//        year: 2019,
-//        topmapselection: "Westminster",
-//        bottommapselection: "Slough",
-//        hexmapvar: "highest",
-//        difftoggle: ""
-//    },
-    
-    //'Highest' is effective for seeing where is overall more deprived: places where all LSOAs are in the more-deprived ranks. \n\
-    
-//    {
-//        menutext: "Highest example",
-//        storytext: "<b>\"Highest\"</b> colours the map based on the highest-ranked zone in each local authority. \n\
-//    Darker reds all have plenty in the least-deprived decile. As the colours become pinker, \n\
-//    the \"highest\" becomes lower - many lighter ones have no zones in the least deprived decile, as shown here on opposite sides of the country.",
-//        year: 2019,
-//        decile_or_rank: "Decile",
-//        topmapselection: "Fenland",
-//        bottommapselection: "West Somerset",
-//        hexmapvar: "lowest",
-//        difftoggle: ""
-//    }
-//   
+   
