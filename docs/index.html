@@ -18,10 +18,11 @@
     <body>
         <div class="wholepage">
             <div id ="interactions" style="position:relative;">
-                <button class="button buttonselectedtop" value="top">Set top map</button>
-                <button class="button" value="bottom">Set bottom map</button>
                 <label for="tags">Choose local authority from map or start typing here: </label>
                 <input id="tags">
+                <span style = "visibility: hidden;">random filler text</span>
+                <button class="button buttonselectedtop" value="top">Set top map</button>
+                <button class="button" value="bottom">Set bottom map</button>
                 <img id="headerimg" src ="header_reduced.png" />
 
             </div>
@@ -35,10 +36,10 @@
 
                 <!--Text box for explanations / story-->
                 <div class ="story">
-                    <p class = "storytext"><b>Welcome to <em>A Tale of Two Countries</em>, 
+                    <p class = "storytext">Welcome to <b><em>A Tale of Two Countries</em></b>, 
                             a tool for examining the 
-                            <a href="https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019" target="_blank">English Index of Multiple Deprivation.</a></b> 
-                        Click on the forward arrow below to learn how to use it and see some of the most striking stories the data tells.
+                            <a href="https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019" target="_blank">English Index of Multiple Deprivation.</a><b> 
+                        Click on the forward arrow below to learn how to use it and see some of the most striking stories the data tells</b>.
                         Use the <em>examples</em> menu below to jump to any story.
                     </p>
                 </div>
@@ -67,10 +68,10 @@
                 <button class="absolute" id="difftoggle" value="diff">diff 15-19</button>
 
 
-                <svg class="map" width="1250px" height="860px">
+                <svg class="map" width="1300px" height="860px">
 
                 <!--top/bottom map marker (y pos changed in code)-->
-                <circle class="topbottommarker" id="marker_top" cx="585" cy="392" r="5"/>
+                <circle class="topbottommarker" id="marker_top" cx="635" cy="392" r="5"/>
 
                 <!--Add buttons for story/examples-->
                 <g transform = "translate(300,800)">
@@ -95,7 +96,7 @@
 
 
                 <!--translate both map and sidebar-->
-                <g class="topmapandsidebar" transform = "translate(500,0)">
+                <g class="topmapandsidebar" transform = "translate(550,0)">
                 <g class="topmap">
 
 
@@ -133,7 +134,7 @@
                 </g>
 
 
-                <g class="bottommapandsidebar" transform = "translate(500,400)">
+                <g class="bottommapandsidebar" transform = "translate(550,400)">
                 <g class="bottommap">
 
 
@@ -157,9 +158,9 @@
 
 
                 <!--just gonna translate this separately to make sure it's over the map-->
-                <text class="svgtxt" id = "topmapname" x ="100" y="400" font-size="30px" fill="blue" fill-opacity="1" text-anchor="left" transform = "translate(500,0)"></text>
+                <text class="svgtxt" id = "topmapname" x ="100" y="400" font-size="30px" fill="blue" fill-opacity="1" text-anchor="left" transform = "translate(550,0)"></text>
 
-                <text class="svgtxt" id = "bottommapname" x ="100" y="400" font-size="30px" fill="green" fill-opacity="1" text-anchor="left" transform = "translate(500,400)"></text>
+                <text class="svgtxt" id = "bottommapname" x ="100" y="400" font-size="30px" fill="green" fill-opacity="1" text-anchor="left" transform = "translate(550,400)"></text>
 
                 <!--hexmap text here to make sure above other elements also-->
                 <text class="svgtxt" id = "nameofla" x ="120" y="610" font-size="40px" fill="rgb(75,75,75)" text-anchor="left"></text>

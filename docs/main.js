@@ -43,6 +43,12 @@ var mapcolours = {
     "topRank": d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 32844]),
     "bottomRank": d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844])
 }
+//var mapcolours = {
+//    "topDecile": d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 10]),
+//    "bottomDecile": d3.scaleSequential(d3.interpolatePRGn).domain([1, 10]),
+//    "topRank": d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 32844]),
+//    "bottomRank": d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844])
+//}
 
 
 //Get scale range from data when variable selection changes
@@ -461,7 +467,7 @@ function drawLegend() {
 //        lines[i] *= 2
 //        lines[i] += 1
 //    }
-    
+
     //Make per pixel to avoid odd scaling patterns
     lines = Array(180).fill().map((v, i) => i)
 
@@ -1049,6 +1055,9 @@ function loadMapData(laname, topbottom) {
         var b = path.bounds(data),
                 s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
                 t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+
+        lookat = b;
+
         // Update the projection to use computed scale & translate.
         projection
                 .scale(s)
@@ -1085,9 +1094,9 @@ function loadMapData(laname, topbottom) {
 
 
 function load() {
-    
+
     console.log("loading")
-    
+
     matchScreenScale()
 
     loadMapData(state.topmapselection, "top")
@@ -1375,10 +1384,10 @@ function story(index) {
 
 
 //SCREEN SCALE CHANGE
-$(window).resize(function() {
-  
-  matchScreenScale()
-  
+$(window).resize(function () {
+
+    matchScreenScale()
+
 });
 
 
@@ -1386,16 +1395,16 @@ $(window).resize(function() {
 //1.04 works in window.innerHeight(1007)
 //0.76 for 729 (without footer but that's fine at that scale)
 //Scalelinear can handily extrapolate beyond either end.
-var screenResizer = d3.scaleLinear().domain([729,1007]).range([0.76,1.04])
+var screenResizer = d3.scaleLinear().domain([729, 1007]).range([0.76, 1.04])
 
 
-function matchScreenScale(){
-    
+function matchScreenScale() {
+
     $("body").css({
-        "transform": "scale(" + screenResizer(window.innerHeight) + ")", 
+        "transform": "scale(" + screenResizer(window.innerHeight) + ")",
         "transform-origin": "50% 0%"
     })
-    
+
 }
 
 
