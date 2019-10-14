@@ -13,7 +13,7 @@ var storyguide = [
     {
         menutext: "Instructions start",
         storytext: "You can <b>compare two local authorities side by side.</b> \n\
-Here, the maps of Sheffield and Manchester show <a href=\"https://data.gov.uk/dataset/c481f2d3-91fc-4767-ae10-2efdf6d58996/lower-layer-super-output-areas-lsoas\">LSOAs</a>\n\
+Here, maps of Sheffield and Manchester show <a href=\"https://data.gov.uk/dataset/c481f2d3-91fc-4767-ae10-2efdf6d58996/lower-layer-super-output-areas-lsoas\">LSOAs</a>\n\
         (the zones used by the IMD) coloured by deprivation index. \n\
 <b>The bars to the right match the map colours</b> - showing exactly where each LSOA is in the IMD rank. \n\
 The bars show the full range for England: most deprived zones at the bottom, least deprived at the top. \n\

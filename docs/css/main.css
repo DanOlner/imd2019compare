@@ -38,6 +38,11 @@ div.story {
 
 }
 
+/*initial size bigger*/
+span.welcome {
+    font-size: 20px;
+}
+
 div.credits {
     text-align: justify; 
     text-align-last: center;
