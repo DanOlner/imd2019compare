@@ -1108,7 +1108,8 @@ function load() {
 //    d3.json("data/hexmap-lad-england_cleannames_w_meanmedianIMD.geojson").then(function (data) {
 //    d3.json("data/hexmap-lad-england_cleannames_w_meanmedianIMD_2015diffs.geojson").then(function (data) {
 //    d3.json("data/hexmap-lad-england_cleannames_w_meanmedian_n_diffs_2015_2019.geojson").then(function (data) {
-    d3.json("data/hexmap-lad-england_cleannames_w_meanmedian_deciles_n_diffs_2015_2019.geojson").then(function (data) {
+//    d3.json("data/hexmap-lad-england_cleannames_w_meanmedian_deciles_n_diffs_2015_2019.geojson").then(function (data) {
+	d3.json("data/hexmap-lad-england_cleannames_POPWEIGHTEDmeanmedian_deciles_n_diffs_2015_2019.geojson").then(function (data) {
 
 
         englandgeofeatures = data
