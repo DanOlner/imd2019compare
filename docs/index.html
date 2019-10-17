@@ -19,12 +19,14 @@
         <div class="wholepage">
             <div id ="interactions" style="position:relative;">
                 <img id="headerimg" src ="header_reduced.png" />
-                <span style = "visibility: hidden;">random filler text random filler text random filler</span>
+                <span style = "visibility: hidden;">random filler text random filler text</span>
                 <label for="tags">Choose local authority from map or start typing here: </label>
                 <input id="tags">
-                <span style = "visibility: hidden;">random filler</span>
-                <button class="button buttonselectedtop" value="top">Set top map</button>
-                <button class="button" value="bottom">Set bottom map</button>
+                <span style = "visibility: hidden;">ra</span>
+                <button class="button" id="topbutton" value="top">Set top map</button>
+                <button class="button" id="bottombutton" value="bottom">Set bottom map</button>
+                <span style = "visibility: hidden;">ra</span>
+                <button id="changecol" value="">Change col</button>
 
             </div>
 
@@ -115,19 +117,23 @@
                 <g id="topsidebar_for_percenttext" transform = "translate(590,10)"></g>
 
                 <!--NOTE! "BOTTOM" SIDEBAR IS ACTUALLY TO THE RIGHT OF THE OTHER SIDE BAR. So position relatively here.-->
-                <g id="bottomsidebar" transform = "translate(640,9)">
+                <g id="bottomsidebar" transform = "translate(650,9)">
                 <rect id = "bottomsidebarrect" width = "35" height = "802"></rect>      
 
                 <!--Then include text saying what sidebar shows. X and Y are reversed when rotating - whole frame is rotated-->
-                <text class="svgtxt" x="200" y="-50" transform="rotate(90)" font-size="20px" fill="black" fill-opacity="0.7">< less deprived</text>
-                <text class="svgtxt" x="450" y="-50" transform="rotate(90)" font-size="20px" fill="black" fill-opacity="0.7">more deprived ></text>
+                <text class="svgtxt" x="200" y="18" transform="rotate(90)" font-size="19px" fill="black" fill-opacity="0.7">< less deprived</text>
+                <text class="svgtxt" x="450" y="18" transform="rotate(90)" font-size="19px" fill="black" fill-opacity="0.7">more deprived ></text>
+
+                <text class="svgtxt" text-anchor = "middle" id="topmapbarlabel" x="400" y="81" transform="rotate(90)" font-size="20px" fill="blue" fill-opacity="1">Sheffield</text>
+                <text class="svgtxt" text-anchor = "middle" id="bottommapbarlabel" x="400" y="-42" transform="rotate(90)" font-size="20px" fill="green" fill-opacity="1">Manchester</text>
+                <!--<text class="svgtxt" text-anchor = "middle" id="topmapbarlabel" x="-400" y="-67" transform="rotate(90)" font-size="20px" fill="blue" fill-opacity="1">Sheffield</text>-->
 
                 </g>
 
                 <!--To keep from losing original rects-->
-                <g id="bottomsidebar_for_deciles" transform = "translate(640,10)"></g>
+                <g id="bottomsidebar_for_deciles" transform = "translate(650,10)"></g>
                 <!--And for keeping percent text on top!-->
-                <g id="bottomsidebar_for_percenttext" transform = "translate(640,10)"></g>
+                <g id="bottomsidebar_for_percenttext" transform = "translate(650,10)"></g>
 
 
 

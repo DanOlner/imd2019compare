@@ -40,7 +40,7 @@ while Manchester has none.",
         difftoggle: ""
     },
     {
-        menutext: "Highest & lowest median IMD 2019",
+        menutext: "Highest & lowest mean IMD 2019",
         storytext: "<b>The England map shows one of six variables you can select - 'mean' through to 'highest'.</b> Examples of each will follow. \n\
 Here, the England map shows <a href=\"https://www.purplemath.com/modules/meanmode.htm\">mean</a> IMD per local authority in 2019</b>. \n\
 Least deprived places in deeper red are clustered around the west of London.\n\
@@ -51,8 +51,6 @@ Hart & Blackpool (shown here) have the highest & lowest median respectively.\n\
         decile_or_rank: "Rank",
         topmapselection: "Blackpool",
         bottommapselection: "Hart",
-//        topmapselection: "Wokingham",
-//        bottommapselection: "Middlesbrough",
         hexmapvar: "mean",
         difftoggle: ""
     },

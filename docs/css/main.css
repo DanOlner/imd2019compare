@@ -95,24 +95,28 @@ https://jsfiddle.net/adeneo/72LvL8n6/*/
 }
 
 
-circle#marker_top {
+/*circle#marker_top {
     fill: blue;
 }
 
 circle#marker_bottom {
     fill: green;
-}
+}*/
 
 
+/*starting with topmap button selected*/
+/*button#topbutton {
+    background: blue;
+}*/
 
-button.buttonselectedtop {
+/*button.buttonselectedtop {
     background: blue;
     color: white;
 }
 button.buttonselectedbottom {
     background: green;
     color: white;
-}
+}*/
 
 /*https://codepen.io/Mukudori/pen/oLQYxL*/
 button.absolute {

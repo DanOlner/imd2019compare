@@ -12,7 +12,8 @@ var state = {
     topgeofeatures: null,
     bottompath: null,
     toppath: null, //These four above copied in the first topbottom check in loadMapData so year change can update correctly
-    legendtext_numbers: false
+    legendtext_numbers: false,
+    colourpalette: 0//cycle through, return to zero.
 }
 
 var lookat = null
@@ -26,36 +27,145 @@ var storyguide_menusub = []//reduced storyguide with items removed where menuite
 //Domain is full England ranks for IMD
 
 //Top and bottom map and matching sidebar colours for individual LSOA rank values
-var bottom_colours_rank = d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844]);
-var top_colours_rank = d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 32844]);
-
-
-//Same again, same colour range - but for deciles, so only ten values.
-var bottom_colours_decile = d3.scaleSequential(d3.interpolatePRGn).domain([1, 10]);
-var top_colours_decile = d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 10]);
-
-
-//Easier way to return the correct one - just sum the strings to get these indices:
-//These are for the top and bottom local authority maps and their matching sidebars
-var mapcolours = {
-    "topDecile": d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 10]),
-    "bottomDecile": d3.scaleSequential(d3.interpolatePRGn).domain([1, 10]),
-    "topRank": d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 32844]),
-    "bottomRank": d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844])
-}
+//var bottom_colours_rank = d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844]);
+//var top_colours_rank = d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 32844]);
+//
+//
+////Same again, same colour range - but for deciles, so only ten values.
+//var bottom_colours_decile = d3.scaleSequential(d3.interpolatePRGn).domain([1, 10]);
+//var top_colours_decile = d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 10]);
+//
+//
+////Easier way to return the correct one - just sum the strings to get these indices:
+////These are for the top and bottom local authority maps and their matching sidebars
+////var basecolour = d3.scaleSequential(d3.interpolatePuOr)
+////var basecolour = d3.scaleSequential(d3.interpolatePiYG)//NO!
+////var basecolour = d3.scaleSequential(d3.interpolateRdGy)
+////var basecolour = d3.scaleSequential(d3.interpolateRdYlBu)//orig
+//var basecolour = d3.scaleSequential(d3.interpolateRdBu)
+//
+////var basecolour = d3.scaleSequential(d3.interpolateCividis)//Promising
+////var basecolour = d3.scaleSequential(d3.interpolateMagma)//Black at bottom, no good
+////var basecolour = d3.scaleSequential(d3.interpolateInferno)//Also black at bottom
+////var basecolour = d3.scaleSequential(d3.interpolatePlasma)//Gaudy
+////var basecolour = d3.scaleSequential(d3.interpolateCubehelixDefault)//NO!
+////var basecolour = d3.scaleSequential(d3.interpolateCool)//NO!
+//
+//var basecolourrank = d3.scaleSequential(d3.interpolateViridis).domain([1, 32844])//Does good at picking out extreme highs
+//var basecolourdecile = d3.scaleSequential(d3.interpolateViridis).domain([1, 10])//Does good at picking out extreme highs
+////var basecolourrank = d3.scaleSequential(d3.interpolateCividis).domain([1, 32844])//Does good at picking out extreme highs
+////var basecolourdecile = d3.scaleSequential(d3.interpolateCividis).domain([1, 10])//Does good at picking out extreme highs
+////var basecolourrank = d3.scaleSequential(d3.interpolatePuOr).domain([1, 32844])//Does good at picking out extreme highs
+////var basecolourdecile = d3.scaleSequential(d3.interpolatePuOr).domain([1, 10])//Does good at picking out extreme highs
+//var basecolourrank = d3.scaleSequential(d3.interpolateRdGy).domain([32844, 1])//Does good at picking out extreme highs
+//var basecolourdecile = d3.scaleSequential(d3.interpolateRdGy).domain([10, 1])//Does good at picking out extreme highs
+//
 //var mapcolours = {
-//    "topDecile": d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 10]),
-//    "bottomDecile": d3.scaleSequential(d3.interpolatePRGn).domain([1, 10]),
-//    "topRank": d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 32844]),
-//    "bottomRank": d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844])
+//    "topDecile": basecolourdecile,
+//    "bottomDecile": basecolourdecile,
+//    "topRank": basecolourrank,
+//    "bottomRank": basecolourrank
 //}
+//
 
 
 //Get scale range from data when variable selection changes
 //Store here
 //Set in setEnglandMapColourScale()
 var hexmapcolourscale = null
+var hexmapcolourpolarity = null
 var legendscale = null
+var basecolourrank = null
+var basecolourdecile = null
+var mapcolours = null
+var topmap_markercol = null
+var bottommap_markercol = null
+
+
+//Set all colours to match. Cycle through with change col button
+function setColours() {
+
+    switch (state.colourpalette) {
+
+        case 0:
+
+            hexmapcolourscale = d3.scaleSequential(d3.interpolateRdBu)
+            hexmapcolourpolarity = "pos"
+            basecolourrank = d3.scaleSequential(d3.interpolateRdBu).domain([1, 32844])
+            basecolourdecile = d3.scaleSequential(d3.interpolateRdBu).domain([1, 10])
+
+            topmap_markercol = "rgb(0,0,255)"
+            bottommap_markercol = "rgb(0,125,0)"
+
+            break;
+
+        case 1:
+
+            hexmapcolourscale = d3.scaleSequential(d3.interpolateViridis)
+            hexmapcolourpolarity = "pos"
+            basecolourrank = d3.scaleSequential(d3.interpolateViridis).domain([1, 32844])
+            basecolourdecile = d3.scaleSequential(d3.interpolateViridis).domain([1, 10])
+
+            topmap_markercol = "rgb(175,0,0)"
+            bottommap_markercol = "rgb(120,0,120)"
+
+            break;
+
+        case 2:
+
+            hexmapcolourscale = d3.scaleSequential(d3.interpolateCividis)
+            hexmapcolourpolarity = "pos"
+            basecolourrank = d3.scaleSequential(d3.interpolateCividis).domain([1, 32844])
+            basecolourdecile = d3.scaleSequential(d3.interpolateCividis).domain([1, 10])
+
+            topmap_markercol = "rgb(175,0,0)"
+            bottommap_markercol = "rgb(120,0,120)"
+
+            break;
+
+        case 3:
+
+            hexmapcolourscale = d3.scaleSequential(d3.interpolatePRGn)
+            hexmapcolourpolarity = "pos"
+            basecolourrank = d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844])
+            basecolourdecile = d3.scaleSequential(d3.interpolatePRGn).domain([1, 10])
+
+            topmap_markercol = "rgb(175,0,0)"
+            bottommap_markercol = "rgb(120,0,120)"
+
+            break;
+
+
+    }
+
+    mapcolours = {
+        "topDecile": basecolourdecile,
+        "bottomDecile": basecolourdecile,
+        "topRank": basecolourrank,
+        "bottomRank": basecolourrank
+    }
+
+    //set bottom top text colours
+    $("#topmapname").attr("fill", topmap_markercol)
+    $("#bottommapname").attr("fill", bottommap_markercol)
+
+    $("#topmapbarlabel").attr("fill", topmap_markercol)
+    $("#bottommapbarlabel").attr("fill", bottommap_markercol)
+
+    if (state.setwhichmap === "top") {
+        $("#topbutton").css("background-color", topmap_markercol)
+        $("#bottombutton").css("background-color", "rgb(255,255,255)")
+        $('.topbottommarker').attr('fill', topmap_markercol);
+    } else {
+        $("#bottombutton").css("background-color", bottommap_markercol)
+        $("#topbutton").css("background-color", "rgb(255,255,255)")
+        $('.topbottommarker').attr('fill', bottommap_markercol);
+    }
+
+
+}
+
+setColours()
 
 
 
@@ -103,6 +213,7 @@ var sideBarVerticalScale_DecilePercent = d3.scaleLinear().domain([0, 100]).range
 
 //https://stackoverflow.com/questions/11720141/set-onclick-event-using-script
 //Class "button" is actually referring to the map top-down choice buttons. Should maybe change that!
+//Yes, should - it just broke something.
 $(".button").click(function () {
 
     state.setwhichmap = this.value
@@ -110,24 +221,54 @@ $(".button").click(function () {
     if (state.setwhichmap == "top") {
         //adds to class def in html...
         //https://stackoverflow.com/questions/16240892/jquery-change-button-color-onclick
-        $(".button").removeClass('buttonselectedtop')
-        $(".button").removeClass('buttonselectedbottom')
+//        $(".button").removeClass('buttonselectedtop')
+//        $(".button").removeClass('buttonselectedbottom')
+        $("#topbutton").css("background-color", topmap_markercol)
+        $("#bottombutton").css("background-color", "rgb(255,255,255)")
+
+
 
         //change map text marker
-        $('#marker_bottom').attr('cy', '392');
-        $('#marker_bottom').attr('id', 'marker_top');
+        $('.topbottommarker').attr('cy', '392');
+//        $('#marker_bottom').attr('id', 'marker_top');
+        $('.topbottommarker').attr('fill', topmap_markercol);
 
 
-        $(this).addClass('buttonselectedtop');
+//        $(this).addClass('buttonselectedtop');
     } else {
-        $(".button").removeClass('buttonselectedtop')
-        $(".button").removeClass('buttonselectedbottom')
-        $(this).addClass('buttonselectedbottom');
 
-        $('#marker_top').attr('cy', '792');
-        $('#marker_top').attr('id', 'marker_bottom');
+        $("#bottombutton").css("background-color", bottommap_markercol)
+        $("#topbutton").css("background-color", "rgb(255,255,255)")
+
+
+//        $(".button").removeClass('buttonselectedtop')
+//        $(".button").removeClass('buttonselectedbottom')
+//        $(this).addClass('buttonselectedbottom');
+
+//        $('#marker_top').attr('cy', '792');
+//        $('#marker_top').attr('id', 'marker_bottom');
+        $('.topbottommarker').attr('cy', '792');
+//        $('#marker_bottom').attr('id', 'marker_top');
+        $('.topbottommarker').attr('fill', bottommap_markercol);
+
 
     }
+
+})
+
+
+$("#changecol").click(function () {
+
+    if (state.colourpalette < 3) {
+        state.colourpalette++
+    } else {
+        state.colourpalette = 0
+    }
+
+    setColours()
+    updateAllMapsAndSidebars()
+    setEnglandMapColourScale()
+    updateEnglandMap()
 
 })
 
@@ -414,7 +555,19 @@ function setEnglandMapColourScale() {
 
     } else {
 
-        hexmapcolourscale = d3.scaleSequential(d3.interpolateRdGy).domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
+        //Need to reset hexmapcolourscale if diff was using it
+        setColours()
+
+        if (hexmapcolourpolarity === "pos") {
+            hexmapcolourscale.domain([Math.min.apply(null, result), Math.max.apply(null, result)]);
+        } else {
+            hexmapcolourscale.domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
+        }
+
+//        hexmapcolourscale = d3.scaleSequential(d3.interpolateRdBu).domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
+//        hexmapcolourscale = d3.scaleSequential(d3.interpolateRdYlBu).domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
+//        hexmapcolourscale = d3.scaleSequential(d3.interpolateRdGy).domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
+//        hexmapcolourscale = d3.scaleSequential(d3.interpolateViridis).domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
 
     }
 
@@ -582,17 +735,17 @@ function updateEnglandMap() {
                     //Have hover colour match the top bottom colour
                     //Some horrible nesting going on here, careful
                     if (state.setwhichmap == "bottom") {
-                        return("rgb(0,255,0)")
+                        return(bottommap_markercol)
                     } else if (state.setwhichmap == "top") {
-                        return("rgb(0,0,255)")
+                        return(topmap_markercol)
                     }
                 }//else if next is after if(state.hoveredover...
 
 //set permanent top bottom marker colour
                 else if (d.properties.n === state.bottommapselection) {
-                    return("rgb(0,255,0)")
+                    return(bottommap_markercol)
                 } else if (d.properties.n === state.topmapselection) {
-                    return("rgb(0,0,255)")
+                    return(topmap_markercol)
                 } else {
 
                     //Setting colour scale from the data - variable count getting a bit high to do manually!
@@ -708,8 +861,9 @@ function updateOverlayMap() {
 //Can update this to work for both, right? Maybe?
 function updateLocalAuthorityMap(geofeatures, path, topbottom) {
 
+    console.log(topbottom + "," + state.decile_or_rank + "," + state.year)
 
-    var selection = null
+            var selection = null
     var classpath = null
 
     if (topbottom == "top") {
@@ -758,6 +912,13 @@ function updateLocalAuthorityMap(geofeatures, path, topbottom) {
 
 function updateSidebar(geofeatures, topbottom) {
 
+
+    //Change sidebar labels
+    var selection = topbottom == "top" ? "#topmapbarlabel" : "#bottommapbarlabel"
+
+    d3.select(selection).text(
+            topbottom == "top" ? state.topmapselection : state.bottommapselection
+            )
 
     //If sidebar is showing deciles, pull out decile values
     //Previously made in R. 
@@ -1109,7 +1270,7 @@ function load() {
 //    d3.json("data/hexmap-lad-england_cleannames_w_meanmedianIMD_2015diffs.geojson").then(function (data) {
 //    d3.json("data/hexmap-lad-england_cleannames_w_meanmedian_n_diffs_2015_2019.geojson").then(function (data) {
 //    d3.json("data/hexmap-lad-england_cleannames_w_meanmedian_deciles_n_diffs_2015_2019.geojson").then(function (data) {
-	d3.json("data/hexmap-lad-england_cleannames_POPWEIGHTEDmeanmedian_deciles_n_diffs_2015_2019.geojson").then(function (data) {
+    d3.json("data/hexmap-lad-england_cleannames_POPWEIGHTEDmeanmedian_deciles_n_diffs_2015_2019.geojson").then(function (data) {
 
 
         englandgeofeatures = data
