@@ -1,30 +1,21 @@
-//These are the things that need to change
-//Year
-//topmapselection
-//bottommapselection
-//hexmapvar: ("median" etc)
-//difftoggle: "diff" or ""
-
-//Set to null if no change
-
-
 var storyguide = [
     
     {
         menutext: "Instructions start",
         storytext: "You can <b>compare two local authorities side by side.</b> \n\
 Here, maps of Sheffield and Manchester show <a href=\"https://data.gov.uk/dataset/c481f2d3-91fc-4767-ae10-2efdf6d58996/lower-layer-super-output-areas-lsoas\">LSOAs</a>\n\
-        (the zones used by the IMD) coloured by deprivation index. \n\
-<b>The bars to the right match the map colours</b> - showing exactly where each LSOA is in the IMD rank. \n\
-The bars show the full range for England: most deprived zones at the bottom, least deprived at the top. \n\
+        (the zones used by the IMD) coloured by deprivation rank. \n\
+The bars to the right show the same LSOAs, giving their rank position in England as a whole: \n\
+most deprived zones at the bottom, least deprived at the top. \n\
 <b>Sheffield has an even spread, Manchester has far fewer 'least deprived' zones.</b>",
         year: 2019,
         decile_or_rank: "Rank",
         topmapselection: "Sheffield",
         bottommapselection: "Manchester",
         hexmapvar: "median",
-        difftoggle: ""
-    },
+        difftoggle: "",
+        palette: 0
+    },    
     {
         menutext: "",
         storytext: "<b>Select a new local authority</b> either by <b>finding it on the England map</b> or <b>typing a part of its name</b> in the autocomplete box at the top. \n\
@@ -37,24 +28,38 @@ while Manchester has none.",
         topmapselection: "Sheffield",
         bottommapselection: "Manchester",
         hexmapvar: "median",
-        difftoggle: ""
+        difftoggle: "",
+        palette: 0
     },
     {
         menutext: "Highest & lowest mean IMD 2019",
         storytext: "<b>The England map shows one of six variables you can select - 'mean' through to 'highest'.</b> Examples of each will follow. \n\
 Here, the England map shows <a href=\"https://www.purplemath.com/modules/meanmode.htm\">mean</a> IMD per local authority in 2019</b>. \n\
-Least deprived places in deeper red are clustered around the west of London.\n\
+Least deprived places are clustered around the west of London.\n\
 More deprived are in the North and North-west, though London has a share. \n\
-Hart & Blackpool (shown here) have the highest & lowest median respectively.\n\
- ",
+Hart & Blackpool (shown here) have the highest & lowest mean respectively.",
         year: 2019,
         decile_or_rank: "Rank",
         topmapselection: "Blackpool",
         bottommapselection: "Hart",
         hexmapvar: "mean",
-        difftoggle: ""
+        difftoggle: "",
+        palette: 0
     },
-    
+    {
+        menutext: "Places containing lowest/highest ranked",
+        storytext: "The IMD ranks LSOAs from 1 (most deprived, bottom of the bars) to 32844 (least deprived, top of the bars). \n\
+<b>The legend below the England map</b> shows which colours are most deprived (min) and least deprived (max). \n\
+Hover over it to get the min/max for the current variable. Use the <b>change palette button</b> (top right) to cycle through a choice of different colour sets.\n\
+Tendring & Chiltern contain the most & least deprived LSOA, respectively.",
+        year: 2019,
+        decile_or_rank: "Rank",
+        topmapselection: "Tendring",
+        bottommapselection: "Chiltern",
+        hexmapvar: "mean",
+        difftoggle: "",
+        palette: 1
+    },
     {
         menutext: "% in bottom decile: if none, doesn't always mean less deprived",
         storytext: "This England map shows the <b>percent of zones in the most deprived decile</b> for each local authority. \n\
@@ -67,7 +72,8 @@ For example, Lambeth (shown here) has the lowest median IMD while having no 'low
         topmapselection: "Middlesbrough",
         bottommapselection: "Lambeth",
         hexmapvar: "decile1prop",
-        difftoggle: ""
+        difftoggle: "",
+        palette: 6
     },
     
     {
@@ -84,7 +90,8 @@ Also select 'rank' and then change year: note the opposite movement pattern.\n\
         topmapselection: "Oldham",
         bottommapselection: "Tower Hamlets",
         hexmapvar: "decile1prop",
-        difftoggle: "diff"
+        difftoggle: "diff",
+        palette: 3
     },
     
 //    The map colour guide gains a black line showing zero: below this, change was negative between those years. \n\
@@ -100,7 +107,8 @@ Click <b>'change year'</b> to see how zones in those two moved in opposite direc
         topmapselection: "Tonbridge and Malling",
         bottommapselection: "Westminster",
         hexmapvar: "mean",
-        difftoggle: "diff"
+        difftoggle: "diff",
+        palette: 3
     },
     
     {
@@ -114,7 +122,8 @@ Many places in the darkest grey have no zones at all in the least deprived decil
         topmapselection: "Wokingham",
         bottommapselection: "Hart",
         hexmapvar: "decile10prop",
-        difftoggle: ""
+        difftoggle: "",
+        palette: 6
     },
     
     //Also, change to <b>diff 15-19</b>: some places where the top decile proportion dropped the most are in the same areas west of London.\n\
@@ -130,22 +139,24 @@ In contrast, Barking & Dagenham has the 'lowest highest': it is consistently one
         topmapselection: "Hart",
         bottommapselection: "Barking and Dagenham",
         hexmapvar: "lowest",
-        difftoggle: ""
+        difftoggle: "",
+        palette: 0
     },
         
     
     {
         menutext: "Places with lowest 'highest' (consistently more-deprived places)",
         storytext: "<b>'Highest'</b> shades the map based on the <b>highest-ranked zone in each local authority.</b> \n\
-The map has many red places because most local authorities have some less-deprived zones. \n\
-Whites and greys have fewer less-deprived zones. The two London local authorities shown here - Barking/Dagenham & Hackney - \n\
+The map has many green places because most local authorities have some less-deprived zones. \n\
+Whites have fewer less-deprived zones. The two London local authorities shown here - Barking/Dagenham & Hackney - \n\
 have the 'lowest highest' in both 2015 & 19: they are consistently more deprived across their whole geography.",
         year: 2019,
         decile_or_rank: "Rank",
         topmapselection: "Barking and Dagenham",
         bottommapselection: "Hackney",
         hexmapvar: "highest",
-        difftoggle: ""
+        difftoggle: "",
+        palette: 3
     },
     
     {
@@ -158,7 +169,8 @@ click the <b>change year</b> button to see the shift in 2019. Note how much more
         topmapselection: "Westminster",
         bottommapselection: "Slough",
         hexmapvar: "highest",
-        difftoggle: "diff"
+        difftoggle: "diff",
+        palette: 0
     },
     
     
@@ -173,7 +185,8 @@ And if you <b>click on 'change year'</b>, you can see plenty of LSOAs changed de
         topmapselection: "Northumberland",
         bottommapselection: "Bury",
         hexmapvar: "median",
-        difftoggle: ""
+        difftoggle: "",
+        palette: 4
     },
     
     
@@ -181,15 +194,16 @@ And if you <b>click on 'change year'</b>, you can see plenty of LSOAs changed de
         menutext: "Mean vs median",
         storytext: "What's the difference between the mean & median? <a href=\"https://blog.datawrapper.de/weekly-chart-income\">This site</a> explains it well, \n\
 and these two example local authorities illustrate that in the IMD data. \n\
-They have the biggest difference between mean & median - Middlesbrough's mean is higher than its median, Three Rivers vice versa. \n\
+They have the biggest difference between mean & median - Middlesbrough's mean is higher than its median, Cheltenham vice versa. \n\
 The mean is strongly affected by extreme values. In Middlesbrough's case, while 49% of its LSOAs are in the lowest decile,\n\
 there are many zones in the other deciles pulling the mean up.",
         year: 2019,
         decile_or_rank: "Decile",
         topmapselection: "Middlesbrough",
-        bottommapselection: "Three Rivers",
+        bottommapselection: "Cheltenham",
         hexmapvar: "median",
-        difftoggle: ""
+        difftoggle: "",
+        palette: 0
     },
     
     

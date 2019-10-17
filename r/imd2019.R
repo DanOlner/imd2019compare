@@ -12,7 +12,7 @@ library(tmap)
 imd2019 <- read_csv('data/imd2019lsoa.csv')
 
 #Drop score measure
-imd2019 <- imd2019 %>% filter(Measurement %in% c('Rank','Decile')
+imd2019 <- imd2019 %>% filter(Measurement %in% c('Rank','Decile'))
 
 #What domains do we have? (Order alphabetically)
 unique(imd2019$`Indices of Deprivation`)[order(unique(imd2019$`Indices of Deprivation`))]
@@ -859,10 +859,10 @@ hexdiffs[which(hexdiffs$decile10prop2019>66.6666),]
 #RELOAD HEX DATA TO PICK OUT STORIES----
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-hex <- st_read('data/hexmap-lad-england_cleannames_w_meanmedian_deciles_n_diffs_2015_2019.geojson')
+hex <- st_read('data/hexmap-lad-england_cleannames_POPWEIGHTEDmeanmedian_deciles_n_diffs_2015_2019.geojson')
 
 #min and max for... everything?
-minmaxes <- data.frame(apply(hex %>% select(mean2015:decile10propdiff),2,range))
+minmaxes <- data.frame(apply(hex %>% select(lowest2015:mediandiff),2,range))
 
 mm <- data.frame(name = names(minmaxes), 
                  mins = as.numeric(minmaxes[1,]) , 
@@ -872,7 +872,7 @@ mm <- data.frame(name = names(minmaxes),
 #For merging place names against
 hexlong <- hex %>% 
   st_set_geometry(NULL) %>% 
-  gather(key = name, value = value, mean2015:decile10propdiff)
+  gather(key = name, value = value, lowest2015:mediandiff)
 
 
 mm.which <- mm %>% 
@@ -895,6 +895,13 @@ x <- hex %>% filter(decile1prop2019 == -999999)
 #(To illustrate how they differ)
 hex$mean_median_diff2019 <- hex$mean2019 - hex$median2019
 
+
+#UPDATE FOR WEIGHTED AVS
+#Middlesbrough (same as before): biggest pos diff: 5831
+#Cheltenham: biggest neg diff: -2403.
+
+
+#OLD
 #Middlesbrough: biggest pos diff: 5676. Mean: 9190. Median: 3513
 #Three Rivers: biggest neg diff: -3504. Mean: 25162. Median: 28666
 
@@ -1098,6 +1105,186 @@ x <- st_intersection(shef.la,allurbsuburb)
 
 
 plot(x[,'Value2019'])
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~
+#LSOA POPULATIONS----
+#~~~~~~~~~~~~~~~~~~~~
+
+#Get LSOAs
+lsoas <- st_read('data/England_lsoa_2011_gen_clipped/england_lsoa_2011_gen_clipped.shp')
+
+
+#And 2015 pop counts from DLG
+#File 6 here: https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019
+pop <- read_csv('data/popdenoms2015_viaDLG.csv')
+
+ggplot(pop, aes(x = `Total population: mid 2015 (excluding prisoners)`)) +
+  geom_density()
+
+#A few with absolutely mahoosive pops
+#So yeah - pop weighted would seem more sensible.
+
+
+#~~~~~~~~~~~
+#HOW MANY LETTERS FOR UNIQUE LA?----
+#~~~~~~~~~~~
+
+#TWo? Three? Just checking...
+length(unique(hex$n))
+
+#15 characters for all unique. Well fine!
+length(unique( str_sub(hex$n,1,15) ))
+
+unique(str_sub(hex$n,1,15))
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#POPULATION-WEIGHTED MEANS AND MEDIANS----
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#So that's only changing:
+#Mean, median, change in mean and median from 15-19
+#Stick into new hexmap data
+imd <- readRDS('data/imd2015_2019_priorToSeparatingByLA.rds') %>% st_set_geometry(NULL)
+
+#Merge in LSOA populations
+pop <- read_csv('data/popdenoms2015_viaDLG.csv')
+
+#Check LSOA match. Tick.
+table(imd$code %in% pop$`LSOA code (2011)`)
+
+#Just use total population
+imd <- imd %>% 
+  left_join(pop %>% select(code = `LSOA code (2011)`, totalpop = `Total population: mid 2015 (excluding prisoners)`),
+            by = "code")
+
+
+#We have a weighted mean base stat function
+la <- imd %>% filter(LAD17NM == 'Sheffield')
+
+#Mostly not very different
+baseweightmean <- weighted.mean(la$Rank2019, la$totalpop)
+# mean(la$Rank2019)
+
+
+#I would like to check it's doing what I think it is
+totalpop <- sum(la$totalpop)
+
+#Or more clear way
+la$rankperperson = la$Rank2019 * la$totalpop
+avweightedrank <- sum(la$rankperperson) / totalpop
+
+#Yup, tick.
+
+
+
+#Weighted median is slightly trickier - I can't think of a better way to do it
+#Than actually making a row per person and finding the middle one
+
+#Ah look, a really useful shortcut!
+#https://stackoverflow.com/a/15177894
+median(rep(la$Rank2019, times=la$totalpop))
+
+
+#Check that's doing what I think it's doing... tick
+rep(c(4,5,6), times = c(1,2,3))
+
+
+
+#Any chance that would work in dplyr group?
+smallgroup <- imd %>% filter(LAD17NM %in% c('Sheffield','Birmingham','Manchester'))
+
+#Tick
+# smallgroup %>% 
+#   group_by(LAD17NM) %>% 
+#   summarise(weightedmean = weighted.mean(Rank2019,totalpop),
+#             weightedmedian = median(rep(Rank2019,times=totalpop)) )
+
+
+weightedz <- imd %>% 
+  group_by(LAD17NM) %>% 
+  summarise(weightedmean = weighted.mean(Rank2019,totalpop),
+            mean = mean(Rank2019),
+            weightedmedian = median(rep(Rank2019,times=totalpop)),
+            median = median(Rank2019),
+            meandiff = mean -weightedmean,
+            mediandiff = median - weightedmedian,
+            totalpop = sum(totalpop)
+            )
+
+plot(weightedz$mediandiff, weightedz$totalpop)
+
+plot(weightedz$meandiff, weightedz$totalpop)  
+
+
+
+#OK. So let's get full set of weighteds and the diffs
+#Stick into new hex
+hex <- st_read('data/hexmap-lad-england_cleannames_w_meanmedian_deciles_n_diffs_2015_2019.geojson')
+
+weightedz19 <- imd %>% 
+  group_by(LAD17NM) %>% 
+  summarise(mean2019 = weighted.mean(Rank2019,totalpop),
+            median2019 = median(rep(Rank2019,times=totalpop)))
+
+
+
+#2015 data comes with pop, that's handy!
+#https://www.gov.uk/government/statistics/english-indices-of-deprivation-2015
+imd2015 <- read_csv('data/File_7_ID_2015_All_ranks__deciles_and_scores_for_the_Indices_of_Deprivation__and_population_denominators.csv')
+
+#Clean LA names for match
+imd2015$`Local Authority District name (2013)` <- stringr::str_replace_all(imd2015$`Local Authority District name (2013)`, "[[:punct:]]", " ")
+
+table(unique(imd2015$`Local Authority District name (2013)`) %in% unique(hex$n))
+
+
+weightedz15 <- imd2015 %>% 
+  group_by(`Local Authority District name (2013)`) %>% 
+  summarise(mean2015 = weighted.mean(`Index of Multiple Deprivation (IMD) Rank (where 1 is most deprived)`,
+                                     `Total population: mid 2012 (excluding prisoners)`),
+            median2015 = median(rep(`Index of Multiple Deprivation (IMD) Rank (where 1 is most deprived)`,
+                                    times=`Total population: mid 2012 (excluding prisoners)`)))
+
+#Join!
+both <- weightedz19 %>% 
+  left_join(weightedz15,
+            by = c(
+              "LAD17NM" = "Local Authority District name (2013)"
+            ))
+
+#get diffs, correct col name
+both$meandiff <- both$mean2019 - both$mean2015
+both$mediandiff <- both$median2019 - both$median2015
+
+#Attach to hex data, drop old avs
+#Check match
+table(both$LAD17NM %in% hex$n)
+
+hex2 <- hex %>% 
+  select(-mean2015,-median2015,-mean2019,-median2019,-meandiff,-mediandiff) %>% 
+  left_join(
+    both,
+    by = c("n"="LAD17NM")
+  )
+
+
+#done!
+st_write(hex2,'data/hexmap-lad-england_cleannames_POPWEIGHTEDmeanmedian_deciles_n_diffs_2015_2019.geojson')
+
+
+
+
+
+
+
+
+
 
 
 

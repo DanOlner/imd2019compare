@@ -94,7 +94,9 @@ function setColours() {
             basecolourrank = d3.scaleSequential(d3.interpolateRdBu).domain([1, 32844])
             basecolourdecile = d3.scaleSequential(d3.interpolateRdBu).domain([1, 10])
 
-            topmap_markercol = "rgb(0,0,255)"
+//            topmap_markercol = "rgb(12, 129, 138)"//aquarmarine
+            topmap_markercol = "rgb(107, 20, 166)"//purple
+//            topmap_markercol = "rgb(0,0,255)"
             bottommap_markercol = "rgb(0,125,0)"
 
             break;
@@ -129,6 +131,42 @@ function setColours() {
             hexmapcolourpolarity = "pos"
             basecolourrank = d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844])
             basecolourdecile = d3.scaleSequential(d3.interpolatePRGn).domain([1, 10])
+
+            topmap_markercol = "rgb(175,0,0)"
+            bottommap_markercol = "rgb(0,0,200)"
+
+            break;
+
+        case 4:
+
+            hexmapcolourscale = d3.scaleSequential(d3.interpolateBrBG)
+            hexmapcolourpolarity = "pos"
+            basecolourrank = d3.scaleSequential(d3.interpolateBrBG).domain([1, 32844])
+            basecolourdecile = d3.scaleSequential(d3.interpolateBrBG).domain([1, 10])
+
+            topmap_markercol = "rgb(175,0,0)"
+            bottommap_markercol = "rgb(0,0,200)"
+
+            break;
+        
+        case 5:
+
+            hexmapcolourscale = d3.scaleSequential(d3.interpolatePuOr)
+            hexmapcolourpolarity = "pos"
+            basecolourrank = d3.scaleSequential(d3.interpolatePuOr).domain([1, 32844])
+            basecolourdecile = d3.scaleSequential(d3.interpolatePuOr).domain([1, 10])
+
+            topmap_markercol = "rgb(175,0,0)"
+            bottommap_markercol = "rgb(0,0,200)"
+
+            break;
+        
+        case 6:
+
+            hexmapcolourscale = d3.scaleSequential(d3.interpolateRdGy)
+            hexmapcolourpolarity = "neg"
+            basecolourrank = d3.scaleSequential(d3.interpolateRdGy).domain([32844,1])
+            basecolourdecile = d3.scaleSequential(d3.interpolateRdGy).domain([10,1])
 
             topmap_markercol = "rgb(175,0,0)"
             bottommap_markercol = "rgb(0,0,200)"
@@ -265,7 +303,7 @@ $(".button").click(function () {
 
 $("#changecol").click(function () {
 
-    if (state.colourpalette < 3) {
+    if (state.colourpalette < 6) {
         state.colourpalette++
     } else {
         state.colourpalette = 0
@@ -867,9 +905,7 @@ function updateOverlayMap() {
 //Can update this to work for both, right? Maybe?
 function updateLocalAuthorityMap(geofeatures, path, topbottom) {
 
-    console.log(topbottom + "," + state.decile_or_rank + "," + state.year)
-
-            var selection = null
+    var selection = null
     var classpath = null
 
     if (topbottom == "top") {
@@ -1443,6 +1479,23 @@ function story(index) {
         yearChanged()
 
     }
+
+
+    if (typeof storyguide[index].palette !== "undefined") {
+
+        state.colourpalette = storyguide[index].palette
+        console.log(storyguide[index].palette)
+        setColours()
+        updateAllMapsAndSidebars()
+        setEnglandMapColourScale()
+        updateEnglandMap()
+
+    } else {
+        console.log("undefined")
+    }
+
+
+
 
 //This needs to be first, before maps load. Updating them twice, though?
 //Optimise updates later...
