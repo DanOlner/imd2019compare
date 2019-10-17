@@ -3,8 +3,8 @@ var state = {
     zonehoveredover: null,
     setwhichmap: "top", //top or bottom
     decile_or_rank: "Rank", //show deciles or exact lines at IMD rank. Use "Decile" and "Rank" to match col names (will have year added to complete col name)
-    topmapselection: "Sheffield",
-    bottommapselection: "Manchester",
+    topmapselection: "Birmingham",
+    bottommapselection: "South Oxfordshire",
     hexmapvar: "median",
     difftoggle: "", //Will be "diff" or "" - slightly tricky as if "diff", don't append year to column name
     year: "2019",
