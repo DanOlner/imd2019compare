@@ -209,7 +209,8 @@ var sideBarVerticalScale_DecilePercent = d3.scaleLinear().domain([0, 100]).range
 //})
 
 
-
+//init
+$("#topbutton").css("color", "white")
 
 //https://stackoverflow.com/questions/11720141/set-onclick-event-using-script
 //Class "button" is actually referring to the map top-down choice buttons. Should maybe change that!
@@ -225,6 +226,8 @@ $(".button").click(function () {
 //        $(".button").removeClass('buttonselectedbottom')
         $("#topbutton").css("background-color", topmap_markercol)
         $("#bottombutton").css("background-color", "rgb(255,255,255)")
+        $("#topbutton").css("color", "white")
+        $("#bottombutton").css("color", "black")
 
 
 
@@ -239,6 +242,9 @@ $(".button").click(function () {
 
         $("#bottombutton").css("background-color", bottommap_markercol)
         $("#topbutton").css("background-color", "rgb(255,255,255)")
+        $("#bottombutton").css("color", "white")
+        $("#topbutton").css("color", "black")
+
 
 
 //        $(".button").removeClass('buttonselectedtop')
