@@ -131,7 +131,7 @@ function setColours() {
             basecolourdecile = d3.scaleSequential(d3.interpolatePRGn).domain([1, 10])
 
             topmap_markercol = "rgb(175,0,0)"
-            bottommap_markercol = "rgb(120,0,120)"
+            bottommap_markercol = "rgb(0,0,200)"
 
             break;
 
