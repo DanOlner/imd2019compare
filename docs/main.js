@@ -26,49 +26,6 @@ var storyguide_menusub = []//reduced storyguide with items removed where menuite
 //https://observablehq.com/@d3/sequential-scales
 //Domain is full England ranks for IMD
 
-//Top and bottom map and matching sidebar colours for individual LSOA rank values
-//var bottom_colours_rank = d3.scaleSequential(d3.interpolatePRGn).domain([1, 32844]);
-//var top_colours_rank = d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 32844]);
-//
-//
-////Same again, same colour range - but for deciles, so only ten values.
-//var bottom_colours_decile = d3.scaleSequential(d3.interpolatePRGn).domain([1, 10]);
-//var top_colours_decile = d3.scaleSequential(d3.interpolateRdYlBu).domain([1, 10]);
-//
-//
-////Easier way to return the correct one - just sum the strings to get these indices:
-////These are for the top and bottom local authority maps and their matching sidebars
-////var basecolour = d3.scaleSequential(d3.interpolatePuOr)
-////var basecolour = d3.scaleSequential(d3.interpolatePiYG)//NO!
-////var basecolour = d3.scaleSequential(d3.interpolateRdGy)
-////var basecolour = d3.scaleSequential(d3.interpolateRdYlBu)//orig
-//var basecolour = d3.scaleSequential(d3.interpolateRdBu)
-//
-////var basecolour = d3.scaleSequential(d3.interpolateCividis)//Promising
-////var basecolour = d3.scaleSequential(d3.interpolateMagma)//Black at bottom, no good
-////var basecolour = d3.scaleSequential(d3.interpolateInferno)//Also black at bottom
-////var basecolour = d3.scaleSequential(d3.interpolatePlasma)//Gaudy
-////var basecolour = d3.scaleSequential(d3.interpolateCubehelixDefault)//NO!
-////var basecolour = d3.scaleSequential(d3.interpolateCool)//NO!
-//
-//var basecolourrank = d3.scaleSequential(d3.interpolateViridis).domain([1, 32844])//Does good at picking out extreme highs
-//var basecolourdecile = d3.scaleSequential(d3.interpolateViridis).domain([1, 10])//Does good at picking out extreme highs
-////var basecolourrank = d3.scaleSequential(d3.interpolateCividis).domain([1, 32844])//Does good at picking out extreme highs
-////var basecolourdecile = d3.scaleSequential(d3.interpolateCividis).domain([1, 10])//Does good at picking out extreme highs
-////var basecolourrank = d3.scaleSequential(d3.interpolatePuOr).domain([1, 32844])//Does good at picking out extreme highs
-////var basecolourdecile = d3.scaleSequential(d3.interpolatePuOr).domain([1, 10])//Does good at picking out extreme highs
-//var basecolourrank = d3.scaleSequential(d3.interpolateRdGy).domain([32844, 1])//Does good at picking out extreme highs
-//var basecolourdecile = d3.scaleSequential(d3.interpolateRdGy).domain([10, 1])//Does good at picking out extreme highs
-//
-//var mapcolours = {
-//    "topDecile": basecolourdecile,
-//    "bottomDecile": basecolourdecile,
-//    "topRank": basecolourrank,
-//    "bottomRank": basecolourrank
-//}
-//
-
-
 //Get scale range from data when variable selection changes
 //Store here
 //Set in setEnglandMapColourScale()
@@ -94,9 +51,7 @@ function setColours() {
             basecolourrank = d3.scaleSequential(d3.interpolateRdBu).domain([1, 32844])
             basecolourdecile = d3.scaleSequential(d3.interpolateRdBu).domain([1, 10])
 
-//            topmap_markercol = "rgb(12, 129, 138)"//aquarmarine
             topmap_markercol = "rgb(107, 20, 166)"//purple
-//            topmap_markercol = "rgb(0,0,255)"
             bottommap_markercol = "rgb(0,125,0)"
 
             break;
@@ -148,7 +103,7 @@ function setColours() {
             bottommap_markercol = "rgb(0,0,200)"
 
             break;
-        
+
         case 5:
 
             hexmapcolourscale = d3.scaleSequential(d3.interpolatePuOr)
@@ -160,15 +115,15 @@ function setColours() {
             bottommap_markercol = "rgb(0,0,200)"
 
             break;
-        
+
         case 6:
 
             hexmapcolourscale = d3.scaleSequential(d3.interpolateRdGy)
             hexmapcolourpolarity = "neg"
-            basecolourrank = d3.scaleSequential(d3.interpolateRdGy).domain([32844,1])
-            basecolourdecile = d3.scaleSequential(d3.interpolateRdGy).domain([10,1])
+            basecolourrank = d3.scaleSequential(d3.interpolateRdGy).domain([32844, 1])
+            basecolourdecile = d3.scaleSequential(d3.interpolateRdGy).domain([10, 1])
 
-            topmap_markercol = "rgb(175,0,0)"
+            topmap_markercol = "rgb(0,125,0)"
             bottommap_markercol = "rgb(0,0,200)"
 
             break;
@@ -232,21 +187,6 @@ var sideBarVerticalScale_DecilePercent = d3.scaleLinear().domain([0, 100]).range
 
 
 
-
-//Bind mouseover and out to legend container
-//$( "#legend" ).mouseout(function() {
-//  state.legendtext_numbers = false
-//})
-//
-////$( ".legendcontainer" ).mouseleave(function() {
-////  state.legendtext_numbers = true
-////})
-//
-//$( "#legend" ).mouseover(function() {
-//  state.legendtext_numbers = true
-//})
-
-
 //init
 $("#topbutton").css("color", "white")
 
@@ -260,22 +200,16 @@ $(".button").click(function () {
     if (state.setwhichmap == "top") {
         //adds to class def in html...
         //https://stackoverflow.com/questions/16240892/jquery-change-button-color-onclick
-//        $(".button").removeClass('buttonselectedtop')
-//        $(".button").removeClass('buttonselectedbottom')
         $("#topbutton").css("background-color", topmap_markercol)
         $("#bottombutton").css("background-color", "rgb(255,255,255)")
         $("#topbutton").css("color", "white")
         $("#bottombutton").css("color", "black")
 
-
-
         //change map text marker
         $('.topbottommarker').attr('cy', '392');
-//        $('#marker_bottom').attr('id', 'marker_top');
         $('.topbottommarker').attr('fill', topmap_markercol);
 
 
-//        $(this).addClass('buttonselectedtop');
     } else {
 
         $("#bottombutton").css("background-color", bottommap_markercol)
@@ -283,16 +217,7 @@ $(".button").click(function () {
         $("#bottombutton").css("color", "white")
         $("#topbutton").css("color", "black")
 
-
-
-//        $(".button").removeClass('buttonselectedtop')
-//        $(".button").removeClass('buttonselectedbottom')
-//        $(this).addClass('buttonselectedbottom');
-
-//        $('#marker_top').attr('cy', '792');
-//        $('#marker_top').attr('id', 'marker_bottom');
         $('.topbottommarker').attr('cy', '792');
-//        $('#marker_bottom').attr('id', 'marker_top');
         $('.topbottommarker').attr('fill', bottommap_markercol);
 
 
@@ -354,21 +279,9 @@ $("#difftoggle").click(function () {
 //year toggle button
 $("#yearbutton").click(function () {
 
-//    console.log("badgers!")
-//
-//    if (state.year === "2019") {
-//
-//        state.year = "2015"
-//
-//    } else {
-//
-//        state.year = "2019"
-//
-//    }
-//    
-    state.year = state.year === "2019" ? "2015" : "2019"
-    yearChanged()
-
+        state.year = state.year === "2019" ? "2015" : "2019"
+        yearChanged()
+    
 })
 
 
@@ -389,73 +302,9 @@ $("#decilerank").click(function () {
 })
 
 
-
-
-
-//KEYPRESSES
-//https://stackoverflow.com/a/48855547/5023561
-//document.addEventListener("keypress", function onPress(event) {
-//    if (event.key === "Y" | event.key === "y") {
-//
-//        state.year = state.year === "2019" ? "2015" : "2019"
-//        yearChanged()
-//
-//    }
-//});
-
-//Change map select on ctrl press
-//Have to faff with class changes, let's leave for now
-//$(document).keydown(function (e) {
-//    if (e.keyCode == 17) {
-////        console.log("ctrl")
-//
-//
-//        if (state.setwhichmap == "top") {
-//            
-//            state.setwhichmap = "bottom"
-//            //adds to class def in html...
-//            //https://stackoverflow.com/questions/16240892/jquery-change-button-color-onclick
-//            $(".button").removeClass('buttonselectedtop')
-//            $(".button").removeClass('buttonselectedbottom')
-//
-//            //change map text marker
-//            $('#marker_bottom').attr('cy', '392');
-//            $('#marker_bottom').attr('id', 'marker_top');
-//
-//
-//            $(this).addClass('buttonselectedtop');
-//        } else {
-//            state.setwhichmap = "top"
-//            
-//            $(".button").removeClass('buttonselectedtop')
-//            $(".button").removeClass('buttonselectedbottom')
-//            $(this).addClass('buttonselectedbottom');
-//
-//            $('#marker_top').attr('cy', '792');
-//            $('#marker_top').attr('id', 'marker_bottom');
-//
-//        }
-//
-//
-//    }
-//});
-
-
 //Load menu items in before attaching click
 //Use subset of storyguide - only those with menu items populated:
 //remove items where menuitems string is empty
-//So D3 can easily populate dropdown and we can avoid having all instruction items in it
-//Failed to find a more elegant way!
-//But note this pulls out a boolean array that should in theory be easy to filter with, right?
-//    var hasmenuitem = storyguide.map(function (d, i) {
-//        
-//        if(d.menutext ===""){
-//            return false
-//        } else {
-//            return true
-//        }
-//    });
-
 for (var i = 0; i < storyguide.length; i++) {
 
     //before pulling out each item (and missing some)
@@ -512,22 +361,7 @@ $('#forwardarrow').click(function () {
         var previousstoryindex = state.storyindex
 
         story(++state.storyindex)
-
-        //Check if we moved from 0 to 1
-        //Which is 2nd story entry so there's now a first
-        //If so, activate back arrow
-//        if (state.storyindex == 1 & previousstoryindex == 0) {
-//            console.log('ping!')
-//            $('#backarrow.arrow_deactivated').addClass('arrow')
-//            $('#backarrow.arrow_deactivated').removeClass('arrow_deactivated')
-//        } else if (state.storyindex == storyguide.length - 1){
-//            //Also check for end of story: make forward arrow grey if so.
-//            $('#forwardarrow.arrow').addClass('arrow_deactivated')
-//            $('#forwardarrow.arrow_deactivated').removeClass('arrow')
-
-
-
-
+        
     }
 
 })
@@ -537,22 +371,7 @@ $('#backarrow').click(function () {
 
     //Not back beyond zero. index starts at minus 1 when loaded.
     if (state.storyindex - 1 >= 0) {
-
         story(--state.storyindex)
-
-        //Check if we moved from last to penultimate
-        //If so, re-activate forward arrow
-//        if (state.storyindex == 1 & previousstoryindex == 0) {
-//            console.log('ping!')
-//            $('#backarrow.arrow_deactivated').addClass('arrow')
-//            $('#backarrow.arrow_deactivated').removeClass('arrow_deactivated')
-//        } else if (state.storyindex == storyguide.length - 1){
-//            //Also check for end of story: make forward arrow grey if so.
-//            $('#forwardarrow.arrow').addClass('arrow_deactivated')
-//            $('#forwardarrow.arrow_deactivated').removeClass('arrow')
-
-
-
     }
 
 })
@@ -608,11 +427,6 @@ function setEnglandMapColourScale() {
             hexmapcolourscale.domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
         }
 
-//        hexmapcolourscale = d3.scaleSequential(d3.interpolateRdBu).domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
-//        hexmapcolourscale = d3.scaleSequential(d3.interpolateRdYlBu).domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
-//        hexmapcolourscale = d3.scaleSequential(d3.interpolateRdGy).domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
-//        hexmapcolourscale = d3.scaleSequential(d3.interpolateViridis).domain([Math.max.apply(null, result), Math.min.apply(null, result)]);
-
     }
 
 
@@ -629,13 +443,12 @@ function setEnglandMapColourScale() {
 
 function yearChanged() {
 
-//    state.year = state.year === "2019" ? "2015" : "2019"
-    setEnglandMapColourScale()
-    updateEnglandMap()
+        setEnglandMapColourScale()
+        updateEnglandMap()
 
-    updateAllMapsAndSidebars()
+        updateAllMapsAndSidebars()
 
-    setYear()
+        setYear()
 
 }
 
@@ -657,22 +470,9 @@ function drawLegend() {
     //Set of lines across the legend, one per two pixels should do huh?
     //Is currently 180 wide...
     //https://stackoverflow.com/questions/3751520/how-to-generate-sequence-of-numbers-chars-in-javascript
-//    lines = Array(90).fill().map((v, i) => i)
-//
-//    //Spaced two pixels apart
-//    for (var i = 0; i < lines.length; i++) {
-//        lines[i] *= 2
-//        lines[i] += 1
-//    }
 
     //Make per pixel to avoid odd scaling patterns
     lines = Array(180).fill().map((v, i) => i)
-
-    //Spaced two pixels apart
-//    for (var i = 0; i < lines.length; i++) {
-//        lines[i] *= 2
-//        lines[i] += 1
-//    }
 
     //drop all prev lines first
     d3.select(".legendcontainer")
@@ -799,18 +599,6 @@ function updateEnglandMap() {
                     } else {
                         return hexmapcolourscale(d.properties[state.hexmapvar + state.year])
                     }
-
-//                    //if showing 2015-19 diff values, don't append year to var name, use diff instead
-////                        return(hexmap_summary_colours(d.properties[state.hexmapvar + "diff"]))
-//
-//                        //Select correct diverging colour scale
-//                        return(
-//                                diffcolours[state.hexmapvar](d.properties[state.hexmapvar + "diff"])
-//                                )
-//
-//                    } else {
-//                        return(hexmap_summary_colours(d.properties[state.hexmapvar + state.year]))
-//                    }
 
                 }
             })
@@ -964,9 +752,7 @@ function updateSidebar(geofeatures, topbottom) {
 
     //If sidebar is showing deciles, pull out decile values
     //Previously made in R. 
-    //Will see if it's fast enough, otherwise can do faster messier version
-
-
+    
     if (state.decile_or_rank === "Decile") {
 
         //Pull out IMD rank into single array
@@ -975,16 +761,12 @@ function updateSidebar(geofeatures, topbottom) {
             return acc.concat(a.properties)
         }, []).map(a => a["Decile" + state.year]);
 
-
-//        lookat = geofeatures
-
 //Get count of unique values
 //https://stackoverflow.com/a/49156466/5023561
         var uniqs = result.reduce((acc, val) => {
             acc[val] = acc[val] === undefined ? 1 : acc[val] += 1;
             return acc;
         }, {});
-//        console.log(uniqs)
 
 //then find as proportion of whole. We have number of LSOAs from geofeatures
         for (var property in uniqs) {
@@ -1011,8 +793,6 @@ function updateSidebar(geofeatures, topbottom) {
                 decileprops[i - 1] = uniqs[i]
             }
         }
-
-//        lookat = decileprops
 
 
 
@@ -1187,13 +967,7 @@ function updateSidebar(geofeatures, topbottom) {
                     return mapcolours[topbottom + state.decile_or_rank](d.properties[state.decile_or_rank + state.year])
 
 
-//                if (topbottom == "top") {
-//                    return(top_colours_rank(d.properties["Rank" + state.year]))
-//                } else {
-//                    return(bottom_colours_rank(d.properties["Rank" + state.year]))
-//                }
                 })
-//            .attr("stroke-opacity", 0.7)
 
     }
 
@@ -1234,13 +1008,10 @@ function loadMapData(laname, topbottom) {
     //SETUP FOR LSOA TOP MAP
     //https://stackoverflow.com/questions/17214293/importing-local-json-file-using-d3-json-does-not-work
     //D3 5 method 
-//    d3.json("data/localauthorities/Sheffield.geojson").then(function (data) {
     d3.json(laname).then(function (data) {
 
         //for later use 
         var geofeatures = data
-
-//        lookat = geofeatures
 
         width = 550
         height = 400
@@ -1308,10 +1079,6 @@ function load() {
 
 
     //SET UP ENGLAND LA HEXMAP
-//    d3.json("data/hexmap-lad-england_cleannames_w_meanmedianIMD.geojson").then(function (data) {
-//    d3.json("data/hexmap-lad-england_cleannames_w_meanmedianIMD_2015diffs.geojson").then(function (data) {
-//    d3.json("data/hexmap-lad-england_cleannames_w_meanmedian_n_diffs_2015_2019.geojson").then(function (data) {
-//    d3.json("data/hexmap-lad-england_cleannames_w_meanmedian_deciles_n_diffs_2015_2019.geojson").then(function (data) {
     d3.json("data/hexmap-lad-england_cleannames_POPWEIGHTEDmeanmedian_deciles_n_diffs_2015_2019.geojson").then(function (data) {
 
 
@@ -1448,8 +1215,6 @@ function load() {
 
 function story(index) {
 
-//    console.log("story " + index)
-
     //update arrows to mark start and end of story
     //grey out back or forward if none in those directions
     if (index == 0) {
@@ -1468,7 +1233,6 @@ function story(index) {
     }
 
 //replace text
-//$(".storytext").text(storyguide[index].storytext);
 //Using replace version so we can have HTML in there.
     $(".storytext").replaceWith("<p class = \"storytext\">" + storyguide[index].storytext + "</p>");
 
@@ -1508,17 +1272,6 @@ function story(index) {
         d3.selectAll(".sidebartext").remove()
 
         updateAllMapsAndSidebars()
-
-//        d3.selectAll(".topsidebarline")
-//                .remove()
-//        d3.selectAll(".bottomsidebarline")
-//                .remove()
-//        d3.selectAll(".topmap_path")
-//                .remove()
-//        d3.selectAll(".bottommap_path")
-//                .remove()
-//
-//        d3.selectAll(".sidebartext").remove()
 
     }
 

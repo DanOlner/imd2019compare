@@ -209,7 +209,11 @@ there are many zones in the other deciles pulling the mean up.",
     
     {
         menutext: "",
-        storytext: "If you find any good data stories here, do let me know - either <a href=\"https://twitter.com/DanOlner\">on twitter</a> or email to dan olner at gmail dot com.",
+        storytext: "Read the full IMD 2019 report <a href=\"https://www.gov.uk/government/publications/english-indices-of-deprivation-2019-research-report\">here</a>. \n\
+Note especially p.29: how to understand change over time in the IMD (it's relative, not absolute). \n\
+See <a href=\"http://www.coveredinbees.org/2019/10/telling-data-stories-with-the-english-index-of-multiple-deprivation\">this post</a> \n\
+        for details on that, the data and code.\n\
+If you find any good data stories here, do let me know - either <a href=\"https://twitter.com/DanOlner\">on twitter</a> or email to dan olner at gmail dot com.",
         year: 2019,
         decile_or_rank: "Rank",
         topmapselection: "Brighton and Hove",
