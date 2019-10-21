@@ -22,7 +22,7 @@ body {
 div.wholepage {
     /*max-width: 1300px;*/
     /*min-width: 1300px;*/
-    width: 1300px;
+    width: 1350px;
     margin: auto;
     /*position: absolute;*/
     /*margin-left: auto;*/
@@ -31,6 +31,11 @@ div.wholepage {
     /*background: white;*/
     background-color: rgb(150,150,150);
     padding: 25px;    
+}
+
+div.mapdiv {
+    position: relative;
+    padding-left: 30px;
 }
 
 
@@ -50,7 +55,7 @@ span.welcome {
 }
 
 div.credits {
-    text-align: justify; 
+    text-align: center; 
     text-align-last: center;
     opacity: 0.5;
 }
